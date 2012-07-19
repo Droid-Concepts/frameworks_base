@@ -104,6 +104,7 @@ import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.policy.OnSizeChangedListener;
 import com.android.systemui.statusbar.policy.Prefs;
+import com.android.systemui.statusbar.powerwidget.PowerWidget;
 
 public class PhoneStatusBar extends BaseStatusBar {
     static final String TAG = "PhoneStatusBar";
@@ -241,6 +242,9 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     // the tracker view
     int mTrackingPosition; // the position of the top of the tracking view.
+
+    // the power widget
+    PowerWidget mPowerWidget;
 
     // ticker
     private Ticker mTicker;
@@ -501,6 +505,25 @@ public class PhoneStatusBar extends BaseStatusBar {
                     View.STATUS_BAR_DISABLE_CLOCK);
         }
 
+        // Load the Power widget views and set the listeners
+        mPowerWidget = (PowerWidget)mStatusBarWindow.findViewById(R.id.exp_power_stat);
+        mPowerWidget.setGlobalButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(Settings.System.getInt(mContext.getContentResolver(),
+                                Settings.System.EXPANDED_HIDE_ONCHANGE, 0) == 1) {
+                            animateCollapsePanels();
+                        }
+                    }
+                });
+        mPowerWidget.setGlobalButtonOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                animateCollapsePanels();
+                return true;
+            }
+        });
+
         mTicker = new MyTicker(context, mStatusBarView);
 
         TickerView tickerView = (TickerView)mStatusBarView.findViewById(R.id.tickerText);
@@ -639,6 +662,9 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         // listen for USER_SETUP_COMPLETE setting (per-user)
         resetUserSetupObserver();
+
+        mPowerWidget.setupWidget();
+        mPowerWidget.updateVisibility();
 
         return mStatusBarView;
     }
@@ -875,6 +901,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         StatusBarIconView view = new StatusBarIconView(mContext, slot, null);
         view.set(icon);
         mStatusIcons.addView(view, viewIndex, new LinearLayout.LayoutParams(mIconSize, mIconSize));
+        mPowerWidget.updateAllButtons();
     }
 
     public void updateIcon(String slot, int index, int viewIndex,
@@ -1399,6 +1426,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
     }
 
+    @Override
     public void animateCollapsePanels(int flags) {
         if (SPEW) {
             Slog.d(TAG, "animateCollapse():"
@@ -1489,6 +1517,9 @@ public class PhoneStatusBar extends BaseStatusBar {
         if (mNotificationButtonAnim != null) mNotificationButtonAnim.cancel();
         if (mClearButtonAnim != null) mClearButtonAnim.cancel();
 
+        // Only show the Power widget if it should be shown
+        mPowerWidget.updateVisibility();
+
         mScrollView.setVisibility(View.VISIBLE);
         mScrollViewAnim = start(
             startDelay(FLIP_DURATION_OUT,
@@ -1553,6 +1584,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         mSettingsButton.setVisibility(View.GONE);
         mScrollView.setVisibility(View.GONE);
         mScrollView.setScaleX(0f);
+        mPowerWidget.setVisibility(View.GONE);
         mNotificationButton.setVisibility(View.VISIBLE);
         mNotificationButton.setAlpha(1f);
         mClearButton.setVisibility(View.GONE);
@@ -1588,6 +1620,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                 ObjectAnimator.ofFloat(mSettingsButton, View.ALPHA, 0f)
                     .setDuration(FLIP_DURATION),
                     mScrollView, View.INVISIBLE));
+        mPowerWidget.setVisibility(View.GONE);
         mNotificationButton.setVisibility(View.VISIBLE);
         mNotificationButtonAnim = start(
             ObjectAnimator.ofFloat(mNotificationButton, View.ALPHA, 1f)
@@ -1643,6 +1676,7 @@ public class PhoneStatusBar extends BaseStatusBar {
 
             mScrollView.setScaleX(1f);
             mScrollView.setVisibility(View.VISIBLE);
+            mPowerWidget.updateVisibility();
             mSettingsButton.setAlpha(1f);
             mSettingsButton.setVisibility(View.VISIBLE);
             mNotificationPanel.setVisibility(View.GONE);
