@@ -389,7 +389,6 @@ class QuickSettings {
                 } else {
                     wifiManager.setWifiEnabled(true);
                 }
-                getService().animateCollapsePanels();
             }
         });
         wifiTile.setOnLongClickListener(new View.OnLongClickListener() {
@@ -562,7 +561,6 @@ class QuickSettings {
                     } else {
                         adapter.enable();
                     }
-                getService().animateCollapsePanels();
                 }
             });
             bluetoothTile.setOnLongClickListener(new View.OnLongClickListener() {
