@@ -91,6 +91,7 @@ class QuickSettings {
 
     private DisplayManager mDisplayManager;
     private WifiDisplayStatus mWifiDisplayStatus;
+    private WifiManager wifiManager;
     private PhoneStatusBar mStatusBarService;
     private BluetoothState mBluetoothState;
     private BluetoothAdapter mBluetoothAdapter;
@@ -127,6 +128,7 @@ class QuickSettings {
         mContainerView = container;
         mModel = new QuickSettingsModel(context);
         mWifiDisplayStatus = new WifiDisplayStatus();
+        wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         mBluetoothState = new QuickSettingsModel.BluetoothState();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -382,7 +384,19 @@ class QuickSettings {
         wifiTile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (wifiManager.isWifiEnabled()) {
+                    wifiManager.setWifiEnabled(false);
+                } else {
+                    wifiManager.setWifiEnabled(true);
+                }
+                getService().animateCollapsePanels();
+            }
+        });
+        wifiTile.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
                 startSettingsActivity(android.provider.Settings.ACTION_WIFI_SETTINGS);
+                return true;
             }
         });
         if (LONG_PRESS_TOGGLES) {
@@ -542,7 +556,20 @@ class QuickSettings {
             bluetoothTile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+                    if (adapter.isEnabled()) {
+                        adapter.disable();
+                    } else {
+                        adapter.enable();
+                    }
+                getService().animateCollapsePanels();
+                }
+            });
+            bluetoothTile.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
                     startSettingsActivity(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                    return true;
                 }
             });
             if (LONG_PRESS_TOGGLES) {
