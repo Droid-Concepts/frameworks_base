@@ -1850,6 +1850,7 @@
   <!-- Config bools -->  
   <java-symbol type="bool" name="config_forceDisableHardwareKeyboard" />
   <java-symbol type="bool" name="config_samsung_stk" />
+  <java-symbol type="bool" name="config_smsSamsungCdmaAlternateMessageIDEncoding" />
 
   <!-- Config Power Menu -->
   <java-symbol type="drawable" name="ic_lock_profile" />
