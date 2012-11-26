@@ -2015,4 +2015,8 @@
   <!-- Expanded desktop default set -->
   <java-symbol type="string" name="expanded_mode_default_set" />
 
+  <!-- Always show battery status on lockscreen -->
+  <java-symbol type="string" name="lockscreen_always_battery" />
+  <java-symbol type="string" name="lockscreen_always_low_battery" />
+
 </resources>
