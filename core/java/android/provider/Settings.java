@@ -2999,7 +2999,13 @@ public final class Settings {
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
-         * Whether to unlock the menu key.  The value is boolean (1 or 0).
+         * NFC polling mode configuration key
+         *
+         * @hide
+         */
+        public static final String NFC_POLLING_MODE = "nfc_polling_mode";
+
+        /**
          * @hide
          */
         public static final String MENU_UNLOCK_SCREEN = "menu_unlock_screen";
