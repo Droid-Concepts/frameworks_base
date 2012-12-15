@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Canvas;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -68,7 +70,7 @@ public class DateView extends TextView {
         mAttachedToWindow = true;
         setUpdates();
     }
-    
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
