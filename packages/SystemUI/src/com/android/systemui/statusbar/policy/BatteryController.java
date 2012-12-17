@@ -51,9 +51,10 @@ public class BatteryController extends BroadcastReceiver {
      *
      * set to public to be reused by CircleBattery
      */
-    public static final int BATTERY_STYLE_CIRCLE         = 2;
-    public static final int BATTERY_STYLE_CIRCLE_PERCENT = 3;
-    public static final int BATTERY_STYLE_GONE           = 4;
+    public  static final int BATTERY_STYLE_CIRCLE                = 2;
+    public  static final int BATTERY_STYLE_CIRCLE_PERCENT        = 3;
+    public  static final int BATTERY_STYLE_DOTTED_CIRCLE_PERCENT = 4;
+    private static final int BATTERY_STYLE_GONE                  = 5;
 
 
     private static final int BATTERY_TEXT_STYLE_NORMAL  = R.string.status_bar_settings_battery_meter_format;
