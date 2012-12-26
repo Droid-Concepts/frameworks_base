@@ -51,9 +51,9 @@ public class MediaFile {
     private static final int LAST_AUDIO_FILE_TYPE = FILE_TYPE_FLAC;
 
     // MIDI file types
-    public static final int FILE_TYPE_MID     = 11;
-    public static final int FILE_TYPE_SMF     = 12;
-    public static final int FILE_TYPE_IMY     = 13;
+    public static final int FILE_TYPE_MID     = 17;
+    public static final int FILE_TYPE_SMF     = 18;
+    public static final int FILE_TYPE_IMY     = 19;
     private static final int FIRST_MIDI_FILE_TYPE = FILE_TYPE_MID;
     private static final int LAST_MIDI_FILE_TYPE = FILE_TYPE_IMY;
    
@@ -77,12 +77,12 @@ public class MediaFile {
     private static final int LAST_VIDEO_FILE_TYPE2 = FILE_TYPE_MP2PS;
 
     // Image file types
-    public static final int FILE_TYPE_JPEG    = 31;
-    public static final int FILE_TYPE_GIF     = 32;
-    public static final int FILE_TYPE_PNG     = 33;
-    public static final int FILE_TYPE_BMP     = 34;
-    public static final int FILE_TYPE_WBMP    = 35;
-    public static final int FILE_TYPE_WEBP    = 36;
+    public static final int FILE_TYPE_JPEG    = 32;
+    public static final int FILE_TYPE_GIF     = 33;
+    public static final int FILE_TYPE_PNG     = 34;
+    public static final int FILE_TYPE_BMP     = 35;
+    public static final int FILE_TYPE_WBMP    = 36;
+    public static final int FILE_TYPE_WEBP    = 37;
     private static final int FIRST_IMAGE_FILE_TYPE = FILE_TYPE_JPEG;
     private static final int LAST_IMAGE_FILE_TYPE = FILE_TYPE_WEBP;
    
