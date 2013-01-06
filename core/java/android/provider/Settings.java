@@ -3112,6 +3112,12 @@ public final class Settings {
         public static final String LOCKSCREEN_VIBRATE_ENABLED = "lockscreen.vibrate_enabled";
 
         /**
+         * Wether the hints for the left and right widgets are shown when the screen is turned on
+         * @hide
+         */
+        public static final String LOCKSCREEN_HIDE_INITIAL_PAGE_HINTS = "lockscreen_hide_initial_page_hints";
+
+        /**
          * Stores used unsecure lockscreen for normal mode and unlock before unlock when merged
          * @hide
          */
