@@ -2233,6 +2233,14 @@ public final class Settings {
         /**
          * @deprecated Use {@link android.provider.Settings.Global#DESK_UNDOCK_SOUND}
          * instead
+
+        /**
+         * Whether or not to launch default music player when headset is connected
+         * @hide
+         */
+        public static final String HEADSET_CONNECT_PLAYER = "headset_connect_player";
+
+        /**
          * @hide
          */
         @Deprecated
