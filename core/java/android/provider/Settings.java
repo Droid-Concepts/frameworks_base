@@ -2906,7 +2906,12 @@ public final class Settings {
         public static final String SAFE_HEADSET_VOLUME = "safe_headset_volume";
 
         /**
-         * Volume rocker wake
+         * Whether or not to launch default music player when headset is connected
+         * @hide
+         */
+        public static final String HEADSET_CONNECT_PLAYER = "headset_connect_player";
+
+        /**
          * @hide
          */
         public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
