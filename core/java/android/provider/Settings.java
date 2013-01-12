@@ -3482,13 +3482,18 @@ public final class Settings {
          *
          * @hide
          */
-
         public static final String[] NOTIFICATION_CLOCK = new String[] {
                 "notification_clock_0",
                 "notification_clock_1",
                 "notification_clock_2",
         };
         
+        /**
+         * Whether to use the carousel as widget container
+         * @hide
+         */
+        public static final String LOCKSCREEN_USE_WIDGET_CONTAINER_CAROUSEL = "lockscreen_use_widget_container_carousel";
+
         /**
          * enabled and order of quick toggles
          * 
