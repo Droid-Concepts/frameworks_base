@@ -36,6 +36,8 @@
     <string name="action_notifications">Notifications</string>
     <string name="action_lastapp">Last App</string>
     <string name="action_none">Empty</string>
+    <string name="quick_settings_navbar_hide_on_label">NavBar Hide On</string>
+    <string name="quick_settings_navbar_hide_off_label">NavBAr Hide Off</string>
 
     <string name="widgets">Widgets</string>
     <string name="toggle_navbar">NavBar - Toggle</string>

@@ -223,4 +223,8 @@
     <dimen name="status_bar_battery_cluster_padding">2dip</dimen>
     <!-- The margin adjusment of the text items of the battery cluster -->
     <dimen name="status_bar_battery_cluster_text_margin">-1dip</dimen>
+
+    <!-- Constant for hidden navbar drag handle -->
+    <dimen name="drag_handle_height">10dp</dimen>
+
 </resources>
