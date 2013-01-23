@@ -215,6 +215,7 @@ public class SearchPanelView extends FrameLayout implements
                     mLongPress = true;
                     Log.d(TAG,"LongPress!");
                     mBar.hideSearchPanel();
+                    maybeSkipKeyguard();
                     AwesomeAction.getInstance(mContext).launchAction(longList.get(mTarget));
                     mSearchPanelLock = true;
                  }
@@ -256,12 +257,7 @@ public class SearchPanelView extends FrameLayout implements
                 if (AwesomeAction.ACTION_ASSIST.equals(intentList.get(target))) {
                     startAssistActivity();
                 } else {
-                    try {
-                        if (mWm.isKeyguardLocked() && !mWm.isKeyguardSecure()) {
-                            ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
-                        }
-                    } catch (RemoteException ignored) {
-                    }
+                    maybeSkipKeyguard();
                     AwesomeAction.getInstance(mContext).launchAction(intentList.get(target));
                 }
                 mHandler.removeCallbacks(SetLongPress);
@@ -296,6 +292,15 @@ public class SearchPanelView extends FrameLayout implements
 
         updateSettings();
         setDrawables();
+    }
+
+    private void maybeSkipKeyguard() {
+        try {
+            if (mWm.isKeyguardLocked() && !mWm.isKeyguardSecure()) {
+                ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+            }
+        } catch (RemoteException ignored) {
+        }
     }
 
     private void setDrawables() {
