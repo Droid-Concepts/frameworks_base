@@ -3044,10 +3044,10 @@ public final class Settings {
         public static final String MENU_UNLOCK_SCREEN = "menu_unlock_screen";
 
         /**
-         * Whether to wake the screen with the volume keys, the value is boolean.
-         * @hide
+         * Battery icon text color
+         * in statusbar
          */
-        public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
+        public static final String STATUS_BAR_BATTERY_TEXT_COLOR = "status_bar_battery_text_color";
 
         /**
          * Whether or not volume button music controls should be enabled to seek media tracks
@@ -3056,14 +3056,10 @@ public final class Settings {
         public static final String VOLBTN_MUSIC_CONTROLS = "volbtn_music_controls";
 
         /**
-         * Whether electronic beam animation is enabled or not
-         * @hide
-         */
-        public static final String SYSTEM_POWER_ENABLE_CRT_OFF = "system_power_enable_crt_off";
-
-        /**
-         * Electronic beam animation mode
-         * 0 = always horizontal, 1 = always vertical, 2 = dependent on orientation
+         * AM/PM Style for clock options
+         * 0 - Normal AM/PM
+         * 1 - Small AM/PM
+         * 2 - No AM/PM
          * @hide
          */
         public static final String SYSTEM_POWER_CRT_MODE = "system_power_crt_mode";
