@@ -135,4 +135,7 @@
     <string name="quick_settings_quiet_hours_off_label">QuietHours Off</string>
     <string name="quick_settings_sound_on">Sound on</string>
 
+    <!-- label for item that toggles NavBar Hide -->
+    <string name="global_actions_toggle_navbar_hide">Navigation and Status Bar Controls</string>
+
 </resources>
