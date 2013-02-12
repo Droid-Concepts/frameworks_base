@@ -1127,6 +1127,16 @@ public abstract class WebSettings {
         throw new MustOverrideException();
     }
 
+     /**
+     * Sets whether the web sockets API is enabled. The default value is
+     * false.
+     *
+     * @param flag true if the WebView should use the web sockets API
+     */
+    public synchronized void setWebSocketsEnabled(boolean flag) {
+        throw new MustOverrideException();
+    }
+
     /**
      * Sets whether the DOM storage API is enabled. The default value is false.
      *
@@ -1181,11 +1191,21 @@ public abstract class WebSettings {
      * </ul>
      * <p>
      * As an option, it is possible to store previous locations and web origin
-     * permissions in a database. See {@link #setGeolocationDatabasePath}.
+     * permissions in a database. See {@link #setGeolocationDatabasePath}..
      *
      * @param flag whether Geolocation should be enabled
      */
     public synchronized void setGeolocationEnabled(boolean flag) {
+        throw new MustOverrideException();
+    }
+
+     /**
+     * Sets whether the web sockets API is enabled. The default value is
+     * false.
+     *
+     * @param flag true if the WebView should use the web sockets API
+     */
+    public synchronized void setWebSocketsEnabled(boolean flag) {
         throw new MustOverrideException();
     }
 
