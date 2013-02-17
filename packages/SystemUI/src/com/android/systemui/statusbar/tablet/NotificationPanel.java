@@ -20,8 +20,20 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
+import android.app.ActivityManager;
+import android.app.ActivityManagerNative;
+import android.app.StatusBarManager;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.RemoteException;
+import android.os.UserHandle;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.Gravity;
@@ -30,16 +42,22 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
+import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.android.systemui.ExpandHelper;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
+import com.android.systemui.statusbar.phone.SettingsPanelView;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
+import com.android.systemui.statusbar.toggles.ToggleManager;
 
 public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
         View.OnClickListener {
@@ -55,8 +73,8 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
     boolean mHasClearableNotifications = false;
     int mNotificationCount = 0;
     NotificationPanelTitle mTitleArea;
-    ImageView mSettingsButton;
-    ImageView mNotificationButton;
+    View mSettingsButton;
+    View mNotificationButton;
     View mNotificationScroller;
     ViewGroup mContentFrame;
     Rect mContentArea = new Rect();
@@ -64,8 +82,13 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
     ViewGroup mContentParent;
     TabletStatusBar mBar;
     View mClearButton;
+
     static Interpolator sAccelerateInterpolator = new AccelerateInterpolator();
     static Interpolator sDecelerateInterpolator = new DecelerateInterpolator();
+
+    // settings
+    ToggleManager mToggleManager;
+    QuickSettingsContainerView mSettingsContainer;
 
     // amount to slide mContentParent down by when mContentFrame is missing
     float mContentFrameMissingTranslation;
@@ -82,6 +105,15 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
 
     public void setBar(TabletStatusBar b) {
         mBar = b;
+
+        // Since we are putting QuickSettings inside the NoticationPanel for TabletBar.
+        // we can't set the services on inflate.  Need to wait until the StatusBar gets attached to
+        // notification Panel.
+        if (mToggleManager != null && mBar != null) {
+            mToggleManager.setControllers(mBar.mBluetoothController,mBar.mNetworkController, mBar.mBatteryController,
+                mBar.mLocationController, null);
+            mToggleManager.updateSettings();
+        }
     }
 
     @Override
@@ -95,8 +127,8 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
         mTitleArea = (NotificationPanelTitle) findViewById(R.id.title_area);
         mTitleArea.setPanel(this);
 
-        mSettingsButton = (ImageView) findViewById(R.id.settings_button);
-        mNotificationButton = (ImageView) findViewById(R.id.notification_button);
+        mSettingsButton = findViewById(R.id.settings_button);
+        mNotificationButton = findViewById(R.id.notification_button);
 
         mNotificationScroller = findViewById(R.id.notification_scroller);
         mContentFrame = (ViewGroup)findViewById(R.id.content_frame);
@@ -321,6 +353,7 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
         if (mSettingsView != null) {
             mContentFrame.removeView(mSettingsView);
             mSettingsView = null;
+
         }
     }
 
@@ -450,15 +483,4 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
             mSettingsButton.setVisibility(settingsEnabled ? View.VISIBLE : View.GONE);
         }
     }
-
-    public void refreshLayout(int layoutDirection) {
-        // Force asset reloading
-        mSettingsButton.setImageDrawable(null);
-        mSettingsButton.setImageResource(R.drawable.ic_notify_settings);
-
-        // Force asset reloading
-        mNotificationButton.setImageDrawable(null);
-        mNotificationButton.setImageResource(R.drawable.ic_notifications);
-    }
 }
-
