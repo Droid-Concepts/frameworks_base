@@ -2980,7 +2980,7 @@ public final class Settings {
 
         /**
          * How many ms to delay before enabling the "slide to unlock" screen
-         * lock when the screen is turned off by the user
+         * lock when the screen is turned off by the user.
          * @hide
          */
         public static final String SCREEN_LOCK_SLIDE_SCREENOFF_DELAY = "screen_lock_slide_screenoff_delay";
