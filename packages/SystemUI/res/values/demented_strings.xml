@@ -77,6 +77,7 @@
     <string name="quick_settings_playing">Playing...</string>
     <string name="quick_settings_quickrecord">Quick Record</string>
     <string name="quick_settings_nofile">Long Press To Record</string>
+    <string name="quick_settings_sleep">Sleep</string>
 
     <!--  Target/Action Strings -->
     <string name="shortcut_label">DEMENTED Actions</string>
