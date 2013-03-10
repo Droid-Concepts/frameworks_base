@@ -3903,6 +3903,14 @@ public final class Settings {
         public static final String NAVIGATION_BAR_ALPHA = "navigation_bar_alpha";
 
         /**
+         * Boolean value whether to allow the statusbar to be used as a
+         * brightness slider when collapsed
+         *
+         * @hide
+         */
+        public static final String STATUSBAR_BRIGHTNESS_SLIDER = "statusbar_brightness_slider";
+
+        /**
          * Navigation bar color.
          *
          * @hide
