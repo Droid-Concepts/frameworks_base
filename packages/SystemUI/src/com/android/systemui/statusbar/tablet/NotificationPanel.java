@@ -34,6 +34,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.Gravity;
@@ -88,6 +89,7 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
 
     // settings
     ToggleManager mToggleManager;
+    int mToggleStyle;
     QuickSettingsContainerView mSettingsContainer;
 
     // amount to slide mContentParent down by when mContentFrame is missing
@@ -139,6 +141,18 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
         mClearButton.setOnClickListener(mClearButtonListener);
 
         mShowing = false;
+
+        mToggleManager = new ToggleManager(mContext);
+        mToggleStyle = Settings.System.getInt(mContext.getContentResolver(), 
+                Settings.System.TOGGLES_STYLE,ToggleManager.STYLE_TILE);
+        if (mToggleStyle == ToggleManager.STYLE_SCROLLABLE) {
+            mToggleManager.setContainer((LinearLayout) findViewById(R.id.quick_toggles),
+                    ToggleManager.STYLE_SCROLLABLE);
+        } else {
+            mToggleManager.setContainer((LinearLayout) findViewById(R.id.quick_toggles),
+                ToggleManager.STYLE_TRADITIONAL);
+        }
+        mToggleManager.updateSettings();
     }
 
     @Override
@@ -484,3 +498,4 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
         }
     }
 }
+
