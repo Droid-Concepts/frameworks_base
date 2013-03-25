@@ -73,7 +73,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone" 
+            android:visibility="gone"
+            />
+
+        <LinearLayout
+            android:id="@+id/ribbon_qs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@*android:dimen/notification_ribbon_padding"
+            android:paddingRight="@*android:dimen/notification_ribbon_padding"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:gravity="center_horizontal"
+            />
+
+        <LinearLayout
+            android:id="@+id/ribbon_notif"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@*android:dimen/notification_ribbon_padding"
+            android:paddingRight="@*android:dimen/notification_ribbon_padding"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
             />
 
         <TextView
