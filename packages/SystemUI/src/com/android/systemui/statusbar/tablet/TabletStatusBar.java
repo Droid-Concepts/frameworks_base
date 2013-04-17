@@ -436,21 +436,32 @@ public class TabletStatusBar extends BaseStatusBar implements
         if (newTheme != null &&
                 (mCurrentTheme == null || !mCurrentTheme.equals(newTheme))) {
             mCurrentTheme = (CustomTheme)newTheme.clone();
-            recreateStatusBar();
+            // restart systemui
+            try {
+                Runtime.getRuntime().exec("pkill -TERM -f com.android.systemui");
+            } catch (IOException e) {
+                // we're screwed here fellas
+            }
         }
+        UpdateWeights(isLandscape());
         loadDimens();
+        final int currentHeight = getStatusBarHeight();
+        final int barHeight = (isLandscape() ? mUserBarHeightLand : mUserBarHeight);
+        if (currentHeight != barHeight) {
+            onBarHeightChanged(barHeight);
+        }
         mNotificationPanelParams.height = getNotificationPanelHeight();
-        mWindowManager.updateViewLayout(mNotificationPanel, mNotificationPanelParams);
-        mShowSearchHoldoff = mContext.getResources().getInteger(
-                R.integer.config_show_search_delay);
+        mWindowManager.updateViewLayout(mNotificationPanel,
+                mNotificationPanelParams);
         updateSearchPanel();
     }
 
     protected void loadDimens() {
         final Resources res = mContext.getResources();
 
-        mNaturalBarHeight = res.getDimensionPixelSize(
-                com.android.internal.R.dimen.navigation_bar_height);
+        mNaturalBarHeight = isLandscape() ?
+                res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height_landscape) :
+                    res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height);
 
         int newIconSize = res.getDimensionPixelSize(
             com.android.internal.R.dimen.system_bar_icon_size);
@@ -755,9 +766,10 @@ public class TabletStatusBar extends BaseStatusBar implements
     }
 
     public int getStatusBarHeight() {
-        return mStatusBarView != null ? mStatusBarView.getHeight()
-                : mContext.getResources().getDimensionPixelSize(
-                        com.android.internal.R.dimen.navigation_bar_height);
+        if (mStatusBarView == null) {
+            return (mNaturalBarHeight);
+        }
+        return mStatusBarView.getHeight();
     }
 
     protected int getStatusBarGravity() {
@@ -1437,7 +1449,7 @@ public class TabletStatusBar extends BaseStatusBar implements
         loadNotificationPanel();
 
         final LinearLayout.LayoutParams params
-            = new LinearLayout.LayoutParams(mIconSize + 2*mIconHPadding, mNaturalBarHeight);
+            = new LinearLayout.LayoutParams(mIconSize + 2*mIconHPadding, getStatusBarHeight());
 
         // alternate behavior in DND mode
         if (mNotificationDNDMode) {
@@ -1620,5 +1632,3 @@ public class TabletStatusBar extends BaseStatusBar implements
                 || (mDisabled & StatusBarManager.DISABLE_HOME) != 0;
     }
 }
-
-
