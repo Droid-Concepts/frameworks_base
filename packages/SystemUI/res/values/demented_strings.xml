@@ -78,6 +78,8 @@
     <string name="quick_settings_quickrecord">Quick Record</string>
     <string name="quick_settings_nofile">Long Press To Record</string>
     <string name="quick_settings_sleep">Sleep</string>
+    <string name="quick_settings_stayawake_on">Stay Awake On</string>
+    <string name="quick_settings_stayawake_off">Stay Awake Off</string>
 
     <!--  Target/Action Strings -->
     <string name="shortcut_label">DEMENTED Actions</string>
