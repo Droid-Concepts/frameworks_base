@@ -80,6 +80,8 @@
     <string name="quick_settings_sleep">Sleep</string>
     <string name="quick_settings_stayawake_on">Stay Awake On</string>
     <string name="quick_settings_stayawake_off">Stay Awake Off</string>
+    <string name="quick_settings_adb_on"><xliff:g id="ip" example="192.168.1.5">%s</xliff:g></string>
+    <string name="quick_settings_adb_off">Wireless ADB Off</string>
 
     <!--  Target/Action Strings -->
     <string name="shortcut_label">DEMENTED Actions</string>
