@@ -33,7 +33,6 @@ import com.android.systemui.recent.TaskDescription;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.tablet.StatusBarPanel;
 import com.android.systemui.statusbar.WidgetView;
-import com.android.systemui.aokp.AokpSwipeRibbon;
 import com.android.systemui.aokp.AppWindow;
 
 import android.app.ActivityManager;
@@ -104,7 +103,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected static final int MSG_HIDE_INTRUDER = 1027;
 
     private WidgetView mWidgetView;
-    private AokpSwipeRibbon mAokpSwipeRibbon;
     private AppWindow mAppWindow;
 
     protected static final boolean ENABLE_INTRUDERS = false;
@@ -248,9 +246,6 @@ public abstract class BaseStatusBar extends SystemUI implements
         createAndAddWindows();
         // create WidgetView
         mWidgetView = new WidgetView(mContext,null);
-        mAokpSwipeRibbon = new AokpSwipeRibbon(mContext,null,"bottom");
-        mAokpSwipeRibbon = new AokpSwipeRibbon(mContext,null,"left");
-        mAokpSwipeRibbon = new AokpSwipeRibbon(mContext,null,"right");
         mAppWindow = new AppWindow(mContext,null);
         disable(switches[0]);
         setSystemUiVisibility(switches[1], 0xffffffff);

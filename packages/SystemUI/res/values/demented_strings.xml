@@ -146,8 +146,10 @@
     <!-- label for item that toggles NavBar Hide -->
     <string name="global_actions_toggle_navbar_hide">Navigation and Status Bar Controls</string>
 
-    <!--  App window Strings -->
+     <!--  App window Strings -->
     <string name="close">Close</string>
     <string name="app_window">Applications</string>
+    <string name="toggles">Toggles</string>
+    <string name="ribbon">Ribbon</string>
 
 </resources>
