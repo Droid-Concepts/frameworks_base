@@ -264,6 +264,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mUserNavBarHeight;
     int mUserNavBarHeightLand;
     int mUserNavBarWidth;
+    private Intent closeAppWindow;
 
     WindowState mKeyguard = null;
     KeyguardViewMediator mKeyguardMediator;
@@ -1400,6 +1401,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         WindowManager wm = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(metrics);
         int density = metrics.densityDpi;
+        closeAppWindow = new Intent();
+        closeAppWindow.setAction("com.android.systemui.ACTION_HIDE_APP_WINDOW");
         ContentResolver resolver = mContext.getContentResolver();
         boolean updateRotation = false;
         synchronized (mLock) {
@@ -2338,6 +2341,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     /** {@inheritDoc} */
     @Override
     public long interceptKeyBeforeDispatching(WindowState win, KeyEvent event, int policyFlags) {
+        mContext.sendBroadcastAsUser(closeAppWindow, UserHandle.ALL);
         final boolean keyguardOn = keyguardOn();
         final int keyCode = event.getKeyCode();
         final int repeatCount = event.getRepeatCount();
