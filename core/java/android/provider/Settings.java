@@ -3901,17 +3901,6 @@ public final class Settings {
         };
 
         /**
-         * @hide
-         */
-        public static final String[] CUSTOM_TOGGLE_TEXT = new String[] {
-            "custom_toggle_text_0",
-            "custom_toggle_text_1",
-            "custom_toggle_text_2",
-            "custom_toggle_text_3",
-            "custom_toggle_text_4",
-        };
-
-        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
