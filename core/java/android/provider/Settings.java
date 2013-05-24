@@ -5863,13 +5863,6 @@ public final class Settings {
         public static final String UI_INVERTED_MODE = "ui_inverted_mode";
 
         /**
-         * force UI mode change for methods which are not observing
-         * UiModeManagerService
-         * @hide
-         */
-        public static final String UI_MODE_IS_TOGGLED = "ui_mode_is_toggled";
-
-        /**
          * Whether screensavers are enabled.
          * @hide
          */
@@ -5962,7 +5955,6 @@ public final class Settings {
             UI_NIGHT_MODE,
             DIALPAD_AUTOCOMPLETE
             UI_INVERTED_MODE,
-            UI_MODE_IS_TOGGLED,
         };
 
         /**
