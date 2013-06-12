@@ -211,15 +211,10 @@ public class SearchPanelView extends FrameLayout implements
 
        final Runnable SetLongPress = new Runnable () {
             public void run() {
-                if (!mSearchPanelLock) {
-                    mSearchPanelLock = true;
+                if (!mLongPress) {
+                    vibrate();
                     mLongPress = true;
-                    if (shouldUnlock(longList.get(mTarget))) {
-                        maybeSkipKeyguard();
-                    }
-                    AwesomeAction.launchAction(mContext, longList.get(mTarget));
-                    mBar.hideSearchPanel();
-                 }
+                }
             }
         };
 
@@ -228,6 +223,14 @@ public class SearchPanelView extends FrameLayout implements
         }
 
         public void onReleased(View v, int handle) {
+            if (!mSearchPanelLock && mLongPress) {
+                mSearchPanelLock = true;
+                if (shouldUnlock(longList.get(mTarget))) {
+                    maybeSkipKeyguard();
+                }
+                AwesomeAction.launchAction(mContext, longList.get(mTarget));
+                mBar.hideSearchPanel();
+            }
         }
 
         public void onTargetChange(View v, final int target) {
@@ -612,12 +615,8 @@ public class SearchPanelView extends FrameLayout implements
                 resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.SYSTEMUI_NAVRING_ICON[i]), false, this);
             }
-
-<<<<<<< HEAD
         }
 
-=======
->>>>>>> ac82ed9... SystemUI: Fix blank Navring on boot,
         @Override
         public void onChange(boolean selfChange) {
             updateSettings();
