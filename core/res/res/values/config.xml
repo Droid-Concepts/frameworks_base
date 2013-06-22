@@ -1180,4 +1180,6 @@
          config to 7. -->
     <integer name="config_deviceHardwareKeys">15</integer>
 
+    <!-- True if the Irda service should be started at system start -->
+    <bool name="config_enableIrdaManagerService">false</bool>
 </resources>
