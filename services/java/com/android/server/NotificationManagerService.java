@@ -2204,6 +2204,10 @@ public class NotificationManagerService extends INotificationManager.Stub
         if (isCallerSystem()) {
             return;
         }
+        if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.CANCEL_NOTIFICATIONS)
+                == PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         final int uid = Binder.getCallingUid();
         try {
             ApplicationInfo ai = AppGlobals.getPackageManager().getApplicationInfo(
