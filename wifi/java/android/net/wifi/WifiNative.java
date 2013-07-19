@@ -792,6 +792,71 @@ public class WifiNative {
         return doBooleanCommand("P2P_SERV_DISC_CANCEL_REQ " + id);
     }
 
+    public boolean getModeCapability(String mode) {
+        String ret = doStringCommand("GET_CAPABILITY modes");
+        if (!TextUtils.isEmpty(ret)) {
+            String[] tokens = ret.split(" ");
+            for (String t : tokens) {
+                if (t.compareTo(mode) == 0)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public List<WifiChannel> getSupportedChannels() {
+        boolean ibssAllowed;
+        List<WifiChannel> channels = new ArrayList<WifiChannel>();
+        String ret = doStringCommand("GET_CAPABILITY freq");
+
+        if (!TextUtils.isEmpty(ret)) {
+            String[] lines = ret.split("\n");
+            for (String l : lines) {
+               if (l.startsWith("Mode") || TextUtils.isEmpty(l)) continue;
+
+               String[] tokens = l.split(" ");
+               if (tokens.length < 4) continue;
+
+               if (tokens.length == 6 && tokens[5].contains("NO_IBSS"))
+                   ibssAllowed = false;
+               else
+                   ibssAllowed = true;
+
+               try {
+                   WifiChannel ch = new WifiChannel(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[3]), ibssAllowed);
+                   if (!channels.contains(ch))
+                       channels.add(ch);
+               } catch (java.lang.NumberFormatException e) {
+                   Log.d(mTAG, "Can't parse: " + l);
+               }
+            }
+        }
+        return channels;
+    }
+
+    public native static boolean setMode(int mode);
+
+    /**Create P2P GO on the operating frequency*/
+    public boolean p2pGroupAddOnSpecifiedFreq(int freq) {
+        return doBooleanCommand("P2P_GROUP_ADD" + " freq=" + freq);
+    }
+
+    /**Set Channel preferrence eg., p2p_pref_chan=81:1,81:2,81:3,81:4,81:5,81:6*/
+    public boolean setPreferredChannel(int startChannel, int endChannel) {
+      int i = 0;
+      if ((startChannel == 0) || (endChannel == 0)) return false;
+          StringBuffer strBuf = new StringBuffer();
+          String command = "SET p2p_pref_chan ";
+          for (i = startChannel; i<=endChannel; i++) {
+              strBuf.append("81:" + i);
+              strBuf.append(",");
+          }
+       strBuf.deleteCharAt(strBuf.length() - 1);
+       command += strBuf;
+       Log.d(mTAG, "setPreferredChannel Command that goes to Supplicant is=" + command);
+       return doBooleanCommand(command) && doBooleanCommand("SAVE_CONFIG");
+    }
+
     /* Set the current mode of miracast operation.
      *  0 = disabled
      *  1 = operating as source
