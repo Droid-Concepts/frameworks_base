@@ -4112,8 +4112,4 @@
     <!-- Message informing user that the requested activity could not be found [CHAR LIMIT=none] -->
     <string name="app_not_found">No application found to handle this action</string>
     <string name="revoke">Revoke</string>
-
-    <!-- Time format -->
-    <string name="twelve_hour_time_format">12 hour time</string>
-    <string name="twenty_four_hour_time_format">24 hour time</string>
 </resources>
