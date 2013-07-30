@@ -19,12 +19,10 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
     private boolean enabled = false;
     private boolean connected = false;
     private BluetoothAdapter mBluetoothAdapter;
-    private BluetoothController mController;
 
-    public BluetoothTile(Context context, QuickSettingsController qsc, BluetoothController controller) {
+    public BluetoothTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mController = controller;
         enabled = mBluetoothAdapter.isEnabled();
         connected = mBluetoothAdapter.getConnectionState() == BluetoothAdapter.STATE_CONNECTED;
 
@@ -103,14 +101,9 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
     void onPostCreate() {
         checkBluetoothState();
         updateTile();
-        mController.addStateChangedCallback(this);
+        BluetoothController controller = new BluetoothController(mContext);
+        controller.addStateChangedCallback(this);
         super.onPostCreate();
-    }
-
-    @Override
-    public void onDestroy() {
-        mController.removeStateChangedCallback(this);
-        super.onDestroy();
     }
 
     @Override
