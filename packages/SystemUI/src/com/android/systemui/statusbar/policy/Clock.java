@@ -223,21 +223,27 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
 
     private final CharSequence getSmallTime() {
         Context context = getContext();
-        boolean is24 = DateFormat.is24HourFormat(context);
-        LocaleData d = LocaleData.get(context.getResources().getConfiguration().locale);
+        boolean b24 = DateFormat.is24HourFormat(context);
+        int res;
+
+        if (b24) {
+            res = R.string.twenty_four_hour_time_format;
+        } else {
+            res = R.string.twelve_hour_time_format;
+        }
 
         final char MAGIC1 = '\uEF00';
         final char MAGIC2 = '\uEF01';
 
         SimpleDateFormat sdf;
-        String format = is24 ? d.timeFormat24 : d.timeFormat12;
+        String format = context.getString(res);
         if (!format.equals(mClockFormatString)) {
             /*
              * Search for an unquoted "a" in the format string, so we can
              * add dummy characters around it to let us find it again after
              * formatting and change its size.
              */
-            if (mAmPmStyle != AM_PM_STYLE_NORMAL) {
+            if (AM_PM_STYLE != AM_PM_STYLE_NORMAL) {
                 int a = -1;
                 boolean quoted = false;
                 for (int i = 0; i < format.length(); i++) {
@@ -303,7 +309,7 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
                 if (AM_PM_STYLE == AM_PM_STYLE_GONE) {
                     formatted.delete(magic1, magic2+1);
                 } else {
-                    if (mAmPmStyle == AM_PM_STYLE_SMALL) {
+                    if (AM_PM_STYLE == AM_PM_STYLE_SMALL) {
                         CharacterStyle style = new RelativeSizeSpan(0.7f);
                         formatted.setSpan(style, magic1, magic2,
                                           Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -330,7 +336,7 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
         return formatted;
     }
 
-    protected void updateSettings() {
+    public void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
         int defaultColor = getResources().getColor(
                 com.android.internal.R.color.holo_blue_light);
@@ -341,8 +347,8 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
         mAmPmStyle = Settings.System.getInt(resolver,
                 Settings.System.STATUSBAR_CLOCK_AM_PM_STYLE, AM_PM_STYLE_GONE);
 
-        if (mAmPmStyle != amPmStyle) {
-            mAmPmStyle = amPmStyle;
+        if (mAmPmStyle != AM_PM_STYLE) {
+            AM_PM_STYLE = mAmPmStyle;
             mClockFormatString = "";
 
             if (mAttached) {

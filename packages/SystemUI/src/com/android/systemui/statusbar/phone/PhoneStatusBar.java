@@ -253,6 +253,9 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     private boolean mShowCarrierInPanel = false;
 
+    // clock
+    private boolean mShowClock;
+
     // drag bar
     CloseDragHandle mCloseView;
     private int mCloseViewHeight;
