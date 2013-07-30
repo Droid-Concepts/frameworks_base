@@ -189,7 +189,15 @@ public class DateTimeView extends TextView {
     }
 
     private DateFormat getTimeFormat() {
-        return android.text.format.DateFormat.getTimeFormat(getContext());
+        int res;
+        Context context = getContext();
+        if (android.text.format.DateFormat.is24HourFormat(context)) {
+            res = R.string.twenty_four_hour_time_format;
+        } else {
+            res = R.string.twelve_hour_time_format;
+        }
+        String format = context.getString(res);
+        return new SimpleDateFormat(format);
     }
 
     private DateFormat getDateFormat() {
