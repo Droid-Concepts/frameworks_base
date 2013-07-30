@@ -161,7 +161,6 @@
                 android:singleLine="true"
                 android:paddingStart="6dip"
                 android:gravity="center_vertical|left"
-                android:clickable="false"
                 />
         </LinearLayout>
     </LinearLayout>
