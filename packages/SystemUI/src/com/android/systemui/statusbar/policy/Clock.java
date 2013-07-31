@@ -39,6 +39,7 @@ import com.android.internal.R;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -190,6 +191,12 @@ public class Clock extends TextView {
                 mCalendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
                 if (mClockFormat != null) {
                     mClockFormat.setTimeZone(mCalendar.getTimeZone());
+                }
+            } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
+                final Locale newLocale = getResources().getConfiguration().locale;
+                if (! newLocale.equals(mLocale)) {
+                    mLocale = newLocale;
+                    mClockFormatString = ""; // force refresh
                 }
             }
             updateClock();
