@@ -1391,6 +1391,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     public void showClock(boolean show) {
         if (mClock != null) {
             mClock.setHidden(!show);
+        }
         if (mStatusBarView == null) return;
         ContentResolver resolver = mContext.getContentResolver();
         View clock = mStatusBarView.findViewById(R.id.clock);

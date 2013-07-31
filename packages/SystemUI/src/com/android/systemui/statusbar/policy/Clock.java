@@ -134,9 +134,6 @@ public class Clock extends TextView {
 
     public Clock(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mObserver = new SettingsObserver(mHandler);
-        mHandler = new Handler();
-        updateSettings();
     }
 
     public void setHidden(boolean hidden) {
@@ -159,7 +156,6 @@ public class Clock extends TextView {
             filter.addAction(Intent.ACTION_USER_SWITCHED);
 
             getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
-            mObserver.observe();
         }
 
         // NOTE: It's safe to do these after registering the receiver since the receiver always runs
@@ -179,7 +175,6 @@ public class Clock extends TextView {
         super.onDetachedFromWindow();
         if (mAttached) {
             getContext().unregisterReceiver(mIntentReceiver);
-            mObserver.unobserve();
             mAttached = false;
         }
     }
@@ -319,7 +314,7 @@ public class Clock extends TextView {
         return formatted;
     }
 
-    protected void updateSettings() {
+    public void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
         int defaultColor = getResources().getColor(
                 com.android.internal.R.color.holo_blue_light);
