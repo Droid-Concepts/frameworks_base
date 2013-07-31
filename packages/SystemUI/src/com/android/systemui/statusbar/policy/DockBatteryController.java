@@ -79,6 +79,10 @@ public class DockBatteryController extends BatteryController {
         cb.onDockBatteryLevelChanged(getBatteryLevel(), isBatteryPresent(), getBatteryStatus());
     }
 
+    public void removeStateChangedCallback(DockBatteryStateChangeCallback cb) {
+        mChangeCallbacks.remove(cb);
+    }
+
     @Override
     public int getIconStyleUnknown() {
         return R.drawable.stat_sys_kb_battery_unknown;

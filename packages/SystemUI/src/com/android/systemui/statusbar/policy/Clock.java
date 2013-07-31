@@ -112,8 +112,11 @@ public class Clock extends TextView {
             updateSettings();
         }
 
-        @Override
-        public void onChange(boolean selfChange) {
+        void unobserve() {
+            mContext.getContentResolver().unregisterContentObserver(this);
+        }
+
+        @Override public void onChange(boolean selfChange) {
             updateSettings();
         }
     }
@@ -128,6 +131,9 @@ public class Clock extends TextView {
 
     public Clock(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mObserver = new SettingsObserver(mHandler);
+        mHandler = new Handler();
+        updateSettings();
     }
 
     public void setHidden(boolean hidden) {
@@ -150,6 +156,7 @@ public class Clock extends TextView {
             filter.addAction(Intent.ACTION_USER_SWITCHED);
 
             getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
+            mObserver.observe();
         }
 
         // NOTE: It's safe to do these after registering the receiver since the receiver always runs
@@ -169,6 +176,7 @@ public class Clock extends TextView {
         super.onDetachedFromWindow();
         if (mAttached) {
             getContext().unregisterReceiver(mIntentReceiver);
+            mObserver.unobserve();
             mAttached = false;
         }
     }

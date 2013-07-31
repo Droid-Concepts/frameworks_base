@@ -45,7 +45,7 @@ import com.android.internal.R;
 public class CircleBattery extends ImageView implements BatteryController.BatteryStateChangeCallback {
     private Handler mHandler;
     private Context mContext;
-    private BatteryReceiver mBatteryReceiver = null;
+    private SettingsObserver mObserver;
 
     // state variables
     private boolean mAttached;      // whether or not attached to a window
@@ -92,6 +92,10 @@ public class CircleBattery extends ImageView implements BatteryController.Batter
             onChange(true);
         }
 
+        public void unobserve() {
+            mContext.getContentResolver().unregisterContentObserver(this);
+        }
+
         @Override
         public void onChange(boolean selfChange) {
             updateSettings();
@@ -115,9 +119,7 @@ public class CircleBattery extends ImageView implements BatteryController.Batter
         mContext = context;
         mHandler = new Handler();
 
-        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
-        settingsObserver.observe();
-        mBatteryReceiver = new BatteryReceiver(mContext);
+        mObserver = new SettingsObserver(mHandler);
 
         // initialize and setup all paint variables
         // stroke width is later set in initSizeBasedStuff()
@@ -155,7 +157,7 @@ public class CircleBattery extends ImageView implements BatteryController.Batter
         super.onAttachedToWindow();
         if (!mAttached) {
             mAttached = true;
-            mBatteryReceiver.updateRegistration();
+            mObserver.observe();
             mHandler.postDelayed(mInvalidate, 250);
         }
     }
@@ -165,7 +167,7 @@ public class CircleBattery extends ImageView implements BatteryController.Batter
         super.onDetachedFromWindow();
         if (mAttached) {
             mAttached = false;
-            mBatteryReceiver.updateRegistration();
+            mObserver.unobserve();
             mRectLeft = null; // makes sure, size based variables get
                                 // recalculated on next attach
             mCircleSize = 0;    // makes sure, mCircleSize is reread from icons on

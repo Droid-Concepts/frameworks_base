@@ -40,7 +40,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.systemui.statusbar.SignalClusterView.SettingsObserver;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.R;
 
@@ -63,6 +62,7 @@ public class SignalClusterTextView
     TextView mMobileSignalText;
 
     Handler mHandler;
+    SettingsObserver mObserver;
 
     int dBm = 0;
 
@@ -76,6 +76,10 @@ public class SignalClusterTextView
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_SIGNAL_TEXT), false, this,
                     UserHandle.USER_ALL);
+        }
+
+        void unobserve() {
+            mContext.getContentResolver().unregisterContentObserver(this);
         }
 
         @Override public void onChange(boolean selfChange) {
@@ -95,9 +99,7 @@ public class SignalClusterTextView
         super(context, attrs, defStyle);
 
         mHandler = new Handler();
-
-        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
-        settingsObserver.observe();
+        mObserver = new SettingsObserver(mHandler);
     }
 
     @Override
@@ -113,6 +115,7 @@ public class SignalClusterTextView
                 mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE
                 | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
+            mObserver.observe();
             updateSettings();
         }
     }
@@ -120,6 +123,7 @@ public class SignalClusterTextView
     @Override
     protected void onDetachedFromWindow() {
         if (mAttached) {
+            mObserver.unobserve();
             mAttached = false;
         }
         super.onDetachedFromWindow();
