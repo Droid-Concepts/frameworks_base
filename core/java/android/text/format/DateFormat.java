@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 
 import libcore.icu.ICU;
+import libcore.icu.LocaleData;
 
 /**
  * Utility class for producing strings with formatted date/time.
@@ -213,16 +214,9 @@ public class DateFormat {
      * @param context the application context
      * @hide
      */
-        boolean b24 = is24HourFormat(context);
-        int res;
-
-        if (b24) {
-            res = R.string.twenty_four_hour_time_format;
-        } else {
-            res = R.string.twelve_hour_time_format;
-        }
-
-        return new java.text.SimpleDateFormat(context.getString(res));
+    public static String getTimeFormatString(Context context) {
+        LocaleData d = LocaleData.get(context.getResources().getConfiguration().locale);
+        return is24HourFormat(context) ? d.timeFormat24 : d.timeFormat12;
     }
 
     /**
