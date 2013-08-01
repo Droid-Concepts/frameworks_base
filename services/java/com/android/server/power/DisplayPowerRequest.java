@@ -67,10 +67,6 @@ final class DisplayPowerRequest {
     // potentially higher CPU usage and flicker.
     public float responsitivityFactor;
 
-    // Droid Concepts settings - override config for ElectronBeam on or off
-    public int electronBeamMode;
-    public boolean electronBeamOffEnabled;
-
     public DisplayPowerRequest() {
         screenState = SCREEN_STATE_BRIGHT;
         useProximitySensor = false;
@@ -78,14 +74,8 @@ final class DisplayPowerRequest {
         screenAutoBrightnessAdjustment = 0.0f;
         useAutoBrightness = false;
         blockScreenOn = false;
-        electronBeamMode = 0;
-        electronBeamOffEnabled = false;
         responsitivityFactor = 1.0f;
     }
-
-    public int getElectronBeamMode() {
-        return electronBeamMode;
-     }
 
     public DisplayPowerRequest(DisplayPowerRequest other) {
         copyFrom(other);
@@ -98,8 +88,6 @@ final class DisplayPowerRequest {
         screenAutoBrightnessAdjustment = other.screenAutoBrightnessAdjustment;
         useAutoBrightness = other.useAutoBrightness;
         blockScreenOn = other.blockScreenOn;
-        electronBeamMode = other.electronBeamMode;
-        electronBeamOffEnabled = other.electronBeamOffEnabled;
         responsitivityFactor = other.responsitivityFactor;
     }
 
@@ -117,9 +105,7 @@ final class DisplayPowerRequest {
                 && screenAutoBrightnessAdjustment == other.screenAutoBrightnessAdjustment
                 && useAutoBrightness == other.useAutoBrightness
                 && blockScreenOn == other.blockScreenOn
-                && Math.abs(responsitivityFactor - other.responsitivityFactor) < 1E-6
-                && electronBeamMode == other.electronBeamMode
-                && electronBeamOffEnabled == other.electronBeamOffEnabled;
+                && Math.abs(responsitivityFactor - other.responsitivityFactor) < 1E-6;
     }
 
     @Override
@@ -135,8 +121,6 @@ final class DisplayPowerRequest {
                 + ", screenAutoBrightnessAdjustment=" + screenAutoBrightnessAdjustment
                 + ", useAutoBrightness=" + useAutoBrightness
                 + ", blockScreenOn=" + blockScreenOn
-                + ", responsitivityFactor=" + responsitivityFactor
-                + ", electronBeamMode=" + electronBeamMode
-                + ", electronBeamOffEnabled=" + electronBeamOffEnabled;
+                + ", responsitivityFactor=" + responsitivityFactor;
     }
 }
