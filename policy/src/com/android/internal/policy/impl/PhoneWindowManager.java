@@ -190,10 +190,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int KEY_ACTION_VOICE_SEARCH = 6;
     private static final int KEY_ACTION_IN_APP_SEARCH = 7;
     private static final int KEY_ACTION_POWER = 8;
-    private static final int KEY_ACTION_NOTIFICATIONS = 9;
-    private static final int KEY_ACTION_KILL_APP = 10;
-    private static final int KEY_ACTION_LAST_APP = 11;
-    private static final int KEY_ACTION_CUSTOM_APP = 12;
+    private static final int KEY_ACTION_KILL_APP = 9;
+    private static final int KEY_ACTION_LAST_APP = 10;
+    private static final int KEY_ACTION_CUSTOM_APP = 11;
 
     // Masks for checking presence of hardware keys.
     // Must match values in core/res/res/values/config.xml
@@ -1039,17 +1038,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 case KEY_ACTION_POWER:
                     PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
                     pm.goToSleep(SystemClock.uptimeMillis());
-                    break;
-                case KEY_ACTION_NOTIFICATIONS:
-                    try {
-                        IStatusBarService statusbar = getStatusBarService();
-                        if (statusbar != null) {
-                            statusbar.toggleNotificationShade();
-                        }
-                    } catch (RemoteException e) {
-                        Slog.e(TAG, "RemoteException when toggling notification shade", e);
-                        mStatusBarService = null;
-                    }
                     break;
             }
         } catch (NumberFormatException e) {
