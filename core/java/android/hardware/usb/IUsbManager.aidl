@@ -95,7 +95,4 @@ interface IUsbManager
 
     /* Deny USB debugging from the attached host */
     void denyUsbDebugging();
-
-    /* Clear public keys installed for secure USB debugging */
-    void clearUsbDebuggingKeys();
 }
