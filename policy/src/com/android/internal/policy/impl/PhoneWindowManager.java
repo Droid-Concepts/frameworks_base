@@ -2477,6 +2477,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         } catch (RemoteException ex) {
                             Log.w(TAG, "RemoteException from getPhoneInterface()", ex);
                         }
+                    } else {
+                        Log.i(TAG, "Ignoring HOME; event canceled.");
                     }
                 }
 
