@@ -1176,6 +1176,16 @@ public abstract class WebSettings {
     }
 
     /**
+     * Gets whether the web sockets API is enabled.
+     *
+     * @return true if the web sockets API is enabled
+     * @see #setWebSocketsEnabled
+     */
+    public synchronized boolean getWebSocketsEnabled() {
+        throw new MustOverrideException();
+    }
+
+    /**
      * Sets whether Geolocation is enabled. The default is true.
      * <p>
      * Please note that in order for the Geolocation API to be usable
@@ -1196,16 +1206,6 @@ public abstract class WebSettings {
      * @param flag whether Geolocation should be enabled
      */
     public synchronized void setGeolocationEnabled(boolean flag) {
-        throw new MustOverrideException();
-    }
-
-     /**
-     * Sets whether the web sockets API is enabled. The default value is
-     * false.
-     *
-     * @param flag true if the WebView should use the web sockets API
-     */
-    public synchronized void setWebSocketsEnabled(boolean flag) {
         throw new MustOverrideException();
     }
 
