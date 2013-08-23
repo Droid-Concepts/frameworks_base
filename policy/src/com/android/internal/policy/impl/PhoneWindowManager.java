@@ -18,6 +18,7 @@ package com.android.internal.policy.impl;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.IActivityManager;
 import android.app.AppOpsManager;
 import android.app.IUiModeManager;
 import android.app.ProgressDialog;
@@ -289,6 +290,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mOrientationSensorEnabled = false;
     int mCurrentAppOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     boolean mHasSoftInput = false;
+    int mBackKillTimeout;
     
     int mPointerLocationMode = 0; // guarded by mLock
 
@@ -801,7 +803,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     Runnable mBackLongPress = new Runnable() {
         public void run() {
             try {
-                performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                final Intent intent = new Intent(Intent.ACTION_MAIN);
+                String defaultHomePackage = "com.android.launcher";
+                intent.addCategory(Intent.CATEGORY_HOME);
+                final ResolveInfo res = mContext.getPackageManager().resolveActivity(intent, 0);
+                if (res.activityInfo != null && !res.activityInfo.packageName.equals("android")) {
+                    defaultHomePackage = res.activityInfo.packageName;
+                }
+                boolean targetKilled = false;
                 IActivityManager am = ActivityManagerNative.getDefault();
                 List<RunningAppProcessInfo> apps = am.getRunningAppProcesses();
                 for (RunningAppProcessInfo appInfo : apps) {
@@ -810,13 +819,29 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     // root, phone, etc.)
                     if (uid >= Process.FIRST_APPLICATION_UID && uid <= Process.LAST_APPLICATION_UID
                             && appInfo.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                        Toast.makeText(mContext, R.string.app_killed_message, Toast.LENGTH_SHORT).show();
-                        // Kill the entire pid
-                        if (appInfo.pkgList != null && (apps.size() > 0)) {
-                            am.forceStopPackage(appInfo.pkgList[0]);
+                        if (appInfo.pkgList != null && (appInfo.pkgList.length > 0)) {
+                            for (String pkg : appInfo.pkgList) {
+                                if (!pkg.equals("com.android.systemui") && !pkg.equals(defaultHomePackage)) {
+                                    am.forceStopPackage(pkg, UserHandle.USER_CURRENT);
+                                    targetKilled = true;
+                                    break;
+                                }
+                            }
                         } else {
                             Process.killProcess(appInfo.pid);
+                            targetKilled = true;
                         }
+                    }
+                    if (targetKilled) {
+                        performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                        /*
+                        TODO: Displaying a Toast
+                        The fix for bug 7048792: Use correct WindowManager for Toast - Using
+                        the application Context instead of the activity Context to retrieve a
+                        WindowManager with no parent window causes a NPE and reboot in 4.2 if we
+                        try to display the Toast below. Disable until we can figure out a solution.
+                        */
+                        //Toast.makeText(mContext, R.string.app_killed_message, Toast.LENGTH_SHORT).show();
                         break;
                     }
                 }
@@ -825,6 +850,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
     };
+
     void showGlobalActionsDialog() {
         if (mGlobalActions == null) {
             mGlobalActions = new GlobalActions(mContext, mWindowManagerFuncs);
@@ -977,6 +1003,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 com.android.internal.R.integer.config_lidNavigationAccessibility);
         mLidControlsSleep = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_lidControlsSleep);
+        mBackKillTimeout = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_backKillTimeout);
         readConfigurationDependentBehaviors();
 
         // register for dock events
@@ -1666,6 +1694,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             }
 
+            // Construct the Toast
+
             Window win = PolicyManager.makeNewWindow(context);
             final TypedArray ta = win.getWindowStyle();
             if (ta.getBoolean(
@@ -2162,7 +2192,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (Settings.Secure.getInt(mContext.getContentResolver(),
-                    Settings.Secure.KILL_APP_LONGPRESS_BACK, 0) == 1) {
+                    Settings.Global.KILL_APP_LONGPRESS_BACK, 0) == 1) {
                 if (down && repeatCount == 0) {
                     mHandler.postDelayed(mBackLongPress, 2000);
                 }
