@@ -279,6 +279,7 @@
   <java-symbol type="bool" name="config_speed_up_audio_on_mt_calls" />
   <java-symbol type="bool" name="config_hasRotationLockSwitch" />
   <java-symbol type="bool" name="config_useFixedVolume" />
+  <java-symbol type="integer" name="config_backKillTimeout" />
 
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_longPressOnPowerBehavior" />
@@ -1868,5 +1869,12 @@
   <java-symbol type="string" name="minutes" />
   <java-symbol type="string" name="second" />
   <java-symbol type="string" name="seconds" />
+
+  <!-- Kill app back press -->
+  <java-symbol type="string" name="app_killed_message" />
+
+  <!-- HW rotation lock -->
+  <java-symbol type="string" name="toast_rotation_unlocked" />
+  <java-symbol type="string" name="toast_rotation_locked" />
 
 </resources>
