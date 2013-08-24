@@ -228,6 +228,8 @@ public class PhoneStatusBar extends BaseStatusBar {
     private int mNotificationHeaderHeight;
 
     private boolean mShowCarrierInPanel = false;
+    private boolean mNotificationShortcutsHideCarrier;
+    FrameLayout.LayoutParams lpCarrierLabel;
 
     // drag bar
     CloseDragHandle mCloseView;
@@ -655,7 +657,7 @@ public class PhoneStatusBar extends BaseStatusBar {
             mPile.setOnSizeChangedListener(new OnSizeChangedListener() {
                 @Override
                 public void onSizeChanged(View view, int w, int h, int oldw, int oldh) {
-                    updateCarrierLabelVisibility(false);
+                    updateCarrierAndWifiLabelVisibility(false);
                 }
             });
         }
@@ -1189,7 +1191,7 @@ public class PhoneStatusBar extends BaseStatusBar {
             final boolean emergencyCallsShownElsewhere = mEmergencyCallLabel != null;
             final boolean makeVisible =
                 !(emergencyCallsShownElsewhere && mNetworkController.isEmergencyOnly())
-                && mPile.getHeight() < (mNotificationPanel.getHeight() - mCarrierAndWifiViewHeight - mNotificationHeaderHeight - calculateCarrierLabelBottomMargin())
+                && mPile.getHeight() < (mNotificationPanel.getHeight() - mCarrierAndWifiViewHeight - mNotificationHeaderHeight())
                 && mScrollView.getVisibility() == View.VISIBLE;
 
             if (force || mCarrierAndWifiViewVisible != makeVisible) {
