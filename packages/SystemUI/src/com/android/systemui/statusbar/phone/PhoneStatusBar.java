@@ -1191,7 +1191,7 @@ public class PhoneStatusBar extends BaseStatusBar {
             final boolean emergencyCallsShownElsewhere = mEmergencyCallLabel != null;
             final boolean makeVisible =
                 !(emergencyCallsShownElsewhere && mNetworkController.isEmergencyOnly())
-                && mPile.getHeight() < (mNotificationPanel.getHeight() - mCarrierAndWifiViewHeight())
+                && mPile.getHeight() < (mNotificationPanel.getHeight() - mCarrierAndWifiViewHeight)
                 && mScrollView.getVisibility() == View.VISIBLE;
 
             if (force || mCarrierAndWifiViewVisible != makeVisible) {
