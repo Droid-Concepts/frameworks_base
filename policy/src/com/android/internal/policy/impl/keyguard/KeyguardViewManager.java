@@ -19,6 +19,7 @@ package com.android.internal.policy.impl.keyguard;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.appwidget.AppWidgetManager;
+import android.appwidget.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
