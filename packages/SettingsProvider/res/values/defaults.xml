@@ -168,4 +168,7 @@
 
     <!-- Default for Settings.Secure.USER_SETUP_COMPLETE -->
     <bool name="def_user_setup_complete">false</bool>
+
+    <!-- Default for Settings.System.LOCKSCREEN_TARGETS. -->
+    <string name="def_lockscreen_targets" translatable="false"></string>
 </resources>
