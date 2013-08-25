@@ -67,7 +67,7 @@
             android:layout_marginRight="5dp"
             android:padding="10dp"
             android:layout_gravity="bottom|left"
-            android:src="@drawable/ic_notify_clear" />
+            android:src="@drawable/ic_recents_clear" />
 
     </FrameLayout>
 
