@@ -3087,6 +3087,25 @@ public final class Settings {
         public static final String POWER_MENU_AIRPLANE_ENABLED = "power_menu_airplane_enabled";
 
         /**
+         * Whether to unlock the screen with the home key.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String HOME_UNLOCK_SCREEN = "home_unlock_screen";
+
+        /**
+         * Whether the lockscreen vibrate should be enabled.
+         * @hide
+         */
+        public static final String LOCKSCREEN_VIBRATE_ENABLED = "lockscreen.vibrate_enabled";
+
+        /**
+         * Stores used unsecure lockscreen for normal mode and unlock before unlock when merged
+         * @hide
+         */
+        public static final String LOCKSCREEN_UNSECURE_USED = "lockscreen_unsecure_used";
+
+
+        /**
          * Whether power menu silent mode is enabled
          * @hide
          */
@@ -3244,6 +3263,7 @@ public final class Settings {
             POWER_MENU_PROFILES_ENABLED,
             POWER_MENU_AIRPLANE_ENABLED,
             POWER_MENU_SILENT_ENABLED,
+            LOCKSCREEN_VIBRATE_ENABLED,
         };
 
         // Settings moved to Settings.Secure
