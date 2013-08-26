@@ -401,7 +401,9 @@ public class KeyguardHostView extends KeyguardViewBase {
          mExpandChallengeView = (View) findViewById(R.id.expand_challenge_handle);
          if (mExpandChallengeView != null) {
              mExpandChallengeView.setOnLongClickListener(mFastUnlockClickListener);
+             }
     }
+
 
     private void setBackButtonEnabled(boolean enabled) {
         if (mContext instanceof Activity) return;  // always enabled in activity mode
