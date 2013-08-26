@@ -412,6 +412,7 @@ public class KeyguardHostView extends KeyguardViewBase {
          mExpandChallengeView = (View) findViewById(R.id.expand_challenge_handle);
          if (mExpandChallengeView != null) {
              mExpandChallengeView.setOnLongClickListener(mFastUnlockClickListener);
+             }
     }
 
 
