@@ -3112,12 +3112,6 @@ public final class Settings {
         public static final String LOCKSCREEN_VIBRATE_ENABLED = "lockscreen.vibrate_enabled";
 
         /**
-         * Wether the hints for the left and right widgets are shown when the screen is turned on
-         * @hide
-         */
-        public static final String LOCKSCREEN_HIDE_INITIAL_PAGE_HINTS = "lockscreen_hide_initial_page_hints";
-
-        /**
          * Stores used unsecure lockscreen for normal mode and unlock before unlock when merged
          * @hide
          */
@@ -3171,11 +3165,17 @@ public final class Settings {
           */
          public static final String KEY_ASSIST_ACTION = "key_assist_action";
 
-        /**
-         * Weather to minimize lockscreen challenge on screen turned on
-         * @hide
-         */
-        public static final String LOCKSCREEN_MAXIMIZE_WIDGETS = "lockscreen_maximize_widgets";
+         /**
+          * Weather to minimize lockscreen challenge on screen turned on
+          * @hide
+          */
+         public static final String LOCKSCREEN_MAXIMIZE_WIDGETS = "lockscreen_maximize_widgets";
+
+         /**
+          * Weather to hide lockscreen gadgets glowing hints
+          * @hide
+          */
+         public static final String LOCKSCREEN_DISABLE_HINTS = "lockscreen_disable_hints";
 
          /**
           * Action to perform when the assistant (search) key is long-pressed. (Default is 4)

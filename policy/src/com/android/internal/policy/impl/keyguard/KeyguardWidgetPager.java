@@ -528,7 +528,8 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
     protected void screenScrolled(int screenCenter) {
         mScreenCenter = screenCenter;
         updatePageAlphaValues(screenCenter);
-        for (int i = 0; i < getChildCount(); i++) {
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
             KeyguardWidgetFrame v = getWidgetPageAt(i);
             if (v == mDragView) continue;
             if (v != null) {
@@ -618,12 +619,10 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
         for (int i = 0; i < count; i++) {
             KeyguardWidgetFrame child = getWidgetPageAt(i);
             if (i != mCurrentPage) {
-                if (!Settings.System.getBoolean(getContext().getContentResolver(),
-                        Settings.System.LOCKSCREEN_HIDE_INITIAL_PAGE_HINTS, false)) {
-                    child.fadeFrame(this, true, KeyguardWidgetFrame.OUTLINE_ALPHA_MULTIPLIER,
-                            CHILDREN_OUTLINE_FADE_IN_DURATION);
+                if(Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.LOCKSCREEN_DISABLE_HINTS, 0) == 0) {
+                    child.setBackgroundAlpha(sidePageAlpha);
                 }
-                child.setBackgroundAlpha(sidePageAlpha);
                 child.setContentAlpha(0f);
             } else {
                 child.setBackgroundAlpha(0f);
