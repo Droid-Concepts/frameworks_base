@@ -1985,6 +1985,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadStringSetting(stmt, Settings.System.LOCKSCREEN_TARGETS,
                     R.string.def_lockscreen_targets);
+
+            loadIntegerSetting(stmt, Settings.System.STATUS_BAR_BATTERY,
+                    R.integer.def_battery_style);
+
+            loadIntegerSetting(stmt, Settings.System.BATTERY_TEXT,
+                    R.integer.def_text_battery);
         } finally {
             if (stmt != null) stmt.close();
         }
