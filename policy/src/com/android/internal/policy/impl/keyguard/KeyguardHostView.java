@@ -385,8 +385,12 @@ public class KeyguardHostView extends KeyguardViewBase {
         }
         checkAppWidgetConsistency();
         mSwitchPageRunnable.run();
-        // This needs to be called after the pages are all added.
-        mViewStateManager.showUsabilityHints();
+
+        if(Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_DISABLE_HINTS, 0) == 0) {
+            // This needs to be called after the pages are all added.
+            mViewStateManager.showUsabilityHints();
+        }
 
         showPrimarySecurityScreen(false);
         updateSecurityViews();
@@ -996,10 +1000,10 @@ public class KeyguardHostView extends KeyguardViewBase {
         // hierarchyviewer).
         requestLayout();
 
-        if (mViewStateManager != null) {
+        if (mViewStateManager != null && Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_DISABLE_HINTS, 0) == 0) {
             mViewStateManager.showUsabilityHints();
         }
-        requestFocus();
         minimizeChallengeIfDesired();
     }
 
@@ -1092,10 +1096,8 @@ public class KeyguardHostView extends KeyguardViewBase {
             return;
         }
 
-        int setting = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, 0, UserHandle.USER_CURRENT);
-
-        if (setting == 1) {
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, 0, UserHandle.USER_CURRENT) == 1) {
             mSlidingChallengeLayout.showChallenge(false);
         }
     }
