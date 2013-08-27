@@ -1878,8 +1878,6 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             reply.writeNoException();
             return true;
         }
-
-        }
 	}
         return super.onTransact(code, data, reply, flags);
     }
