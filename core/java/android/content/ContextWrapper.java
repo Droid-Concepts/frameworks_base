@@ -519,7 +519,6 @@ public class ContextWrapper extends Context {
         return mBase.getSystemService(name);
     }
 
-    /** @hide */
     @Override
     public int checkPermission(String permission, int pid, int uid) {
         return mBase.checkPermission(permission, pid, uid);
