@@ -1879,14 +1879,14 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             return true;
         }
 
-/**        case IS_PRIVACY_GUARD_ENABLED_TRANSACTION: {
+        case IS_PRIVACY_GUARD_ENABLED_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
             int pid = data.readInt();
             boolean res = isPrivacyGuardEnabledForProcess(pid);
             reply.writeNoException();
             reply.writeInt(res ? 1 : 0);
             return true;
-        }*/
+        }
 	}
         return super.onTransact(code, data, reply, flags);
     }
