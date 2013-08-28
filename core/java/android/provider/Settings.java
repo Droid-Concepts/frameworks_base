@@ -3777,11 +3777,7 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
-<<<<<<< HEAD
-=======
 
-
->>>>>>> bfd34bc... QuickSettings: allow custom ordering and what toggles are visible/hidden
     }
 
     /**
