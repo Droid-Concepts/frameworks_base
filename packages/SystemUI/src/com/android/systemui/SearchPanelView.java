@@ -146,27 +146,11 @@ public class SearchPanelView extends FrameLayout implements
         mResources = mContext.getResources();
 
         mContentResolver = mContext.getContentResolver();
-<<<<<<< HEAD
-=======
-        mSettingsObserver = new SettingsObserver(new Handler());
-        updateSettings();
-    }
->>>>>>> ac82ed9... SystemUI: Fix blank Navring on boot,
-
         SettingsObserver observer = new SettingsObserver(new Handler());
         observer.observe();
         updateSettings();
     }
 
-<<<<<<< HEAD
-=======
-    @Override
-    protected void onDetachedFromWindow() {
-        mContentResolver.unregisterContentObserver(mSettingsObserver);
-        super.onDetachedFromWindow();
-    }
-
->>>>>>> ac82ed9... SystemUI: Fix blank Navring on boot,
     private void startAssistActivity() {
         if (!mBar.isDeviceProvisioned()) return;
 
