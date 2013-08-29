@@ -169,11 +169,7 @@ public class AwesomeAction {
                 mContext.sendBroadcast(new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"));
                 break;
             case ACTION_TORCH:
-                Intent intentTorch = new Intent("android.intent.action.MAIN");
-                intentTorch.setComponent(ComponentName.unflattenFromString("com.aokp.Torch/.TorchActivity"));
-                intentTorch.addCategory("android.intent.category.LAUNCHER");
-                intentTorch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(intentTorch);
+                mcontext.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
                 break;
             case ACTION_TODAY:
                 long startMillis = System.currentTimeMillis();
