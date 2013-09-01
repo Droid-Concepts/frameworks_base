@@ -2004,5 +2004,4 @@
   <java-symbol type="anim" name="recents_fade_in" />
   <java-symbol type="anim" name="recents_fade_out" />
 
->>>>>>> 3621a77... FW : Rework NavBar UI in ROMControl.
 </resources>

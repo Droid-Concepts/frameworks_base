@@ -1396,6 +1396,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    private void resetScreenHelper() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(metrics);
+        int density = metrics.densityDpi;
+        if(mDisplay != null)
+            setInitialDisplaySize(mDisplay, mUnrestrictedScreenWidth, mUnrestrictedScreenHeight, density);
+    }
+
     public void updateSettings() {
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager wm = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);

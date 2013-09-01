@@ -127,6 +127,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private final boolean mShowSilentToggle;
     private boolean mEnableNavBarHideToggle = true;
     private static int rebootIndex = 0;
+    private Profile mChosenProfile;
 
     /**
      * @param context everything needs a context :(
