@@ -468,9 +468,6 @@ public class NavigationBarView extends LinearLayout {
     private ExtensibleKeyButtonView generateKey(boolean landscape, String clickAction,
             String longpress,String iconUri) {
 
-    private ExtensibleKeyButtonView generateKey(boolean landscape, String clickAction,
-            String longpress,String iconUri) {
-
         ExtensibleKeyButtonView v = new ExtensibleKeyButtonView(mContext, null,
                 clickAction, longpress);
         v.setLayoutParams(getLayoutParams(landscape, mButtonWidth));
