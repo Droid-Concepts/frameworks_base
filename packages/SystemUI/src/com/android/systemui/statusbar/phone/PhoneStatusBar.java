@@ -39,6 +39,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -2883,10 +2884,6 @@ public class PhoneStatusBar extends BaseStatusBar {
             }
             loadDimens();
         }
-
-        // Update the QuickSettings container
-        if (mQS != null) mQS.updateResources();
-
     }
 
     protected void loadDimens() {
@@ -3064,7 +3061,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         updateRibbonTargets();
     }
 
-    public boolean skipToSettingsPanel() {
+   public boolean skipToSettingsPanel() {
         if (mPile == null || mNotificationData == null) return false;
 
         int N = mNotificationData.size();
@@ -3074,7 +3071,7 @@ public class PhoneStatusBar extends BaseStatusBar {
             if(ent != null
                     && ent.notification != null
                     && notificationIsForCurrentUser(ent.notification)) {
-                switch(ent.notification.id) {
+                switch(ent.notification.getId()) {
                     // ignore adb icon
                     case com.android.internal.R.drawable.stat_sys_adb:
                         continue;

@@ -180,7 +180,7 @@ public class AwesomeAction {
                 mContext.sendBroadcast(new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"));
                 break;
             case ACTION_TORCH:
-                mcontext.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
+                mContext.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
                 break;
             case ACTION_TODAY:
                 long startMillis = System.currentTimeMillis();

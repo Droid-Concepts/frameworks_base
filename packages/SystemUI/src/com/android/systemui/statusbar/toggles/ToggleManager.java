@@ -75,7 +75,6 @@ public class ToggleManager {
     public static final String BATTERY_TOGGLE = "BATTERY";
     public static final String AIRPLANE_TOGGLE = "AIRPLANE_MODE";
     public static final String BLUETOOTH_TOGGLE = "BLUETOOTH";
-    public static final String SWAGGER_TOGGLE = "SWAGGER";
     public static final String VIBRATE_TOGGLE = "VIBRATE";
     public static final String SILENT_TOGGLE = "SILENT";
     public static final String FCHARGE_TOGGLE = "FCHARGE";
@@ -135,7 +134,6 @@ public class ToggleManager {
             if (deviceSupportsBluetooth()) {
                 toggleMap.put(BLUETOOTH_TOGGLE, BluetoothToggle.class);
             }
-            toggleMap.put(SWAGGER_TOGGLE, SwaggerToggle.class);
             if (((Vibrator)mContext.getSystemService(Context.VIBRATOR_SERVICE)).hasVibrator()) {
                 toggleMap.put(VIBRATE_TOGGLE, VibrateToggle.class);
                 toggleMap.put(SOUND_STATE_TOGGLE, SoundStateToggle.class);
