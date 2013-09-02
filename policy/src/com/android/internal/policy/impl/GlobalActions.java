@@ -129,8 +129,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private static int rebootIndex = 0;
     private Profile mChosenProfile;
 
-    private Profile mChosenProfile;
-
     /**
      * @param context everything needs a context :(
      */
