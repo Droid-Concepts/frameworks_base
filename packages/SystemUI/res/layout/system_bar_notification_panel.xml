@@ -52,8 +52,15 @@
             android:layout_weight="0"
             />
 
-        <ScrollView
+        <LinearLayout
+            android:id="@+id/quick_toggles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" 
+            />
 
+        <ScrollView
             android:id="@+id/notification_scroller"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"

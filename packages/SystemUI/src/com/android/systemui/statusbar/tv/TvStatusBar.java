@@ -21,6 +21,7 @@ import com.android.internal.statusbar.StatusBarIcon;
 import com.android.systemui.statusbar.BaseStatusBar;
 
 import android.os.IBinder;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
@@ -82,6 +83,22 @@ public class TvStatusBar extends BaseStatusBar {
 
     @Override
     public void setHardKeyboardStatus(boolean available, boolean enabled) {
+    }
+
+    @Override
+    public void toggleNotificationShade() {
+    }
+
+    @Override
+    protected void onBarTouchEvent(MotionEvent ev) {
+    }
+
+    @Override
+    protected void showBar(boolean showSearch){
+    }
+
+    @Override
+    protected void setSearchLightOn(boolean on){
     }
 
     @Override

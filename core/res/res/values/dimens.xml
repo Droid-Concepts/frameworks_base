@@ -343,4 +343,9 @@
     security mode. -->
     <dimen name="kg_small_widget_height">160dp</dimen>
 
+    <dimen name="icon_size_20">20.0dip</dimen>
+    <dimen name="icon_size_15">15.0dip</dimen>
+    <dimen name="notification_ribbon_padding">16dp</dimen>
+    <dimen name="lockscreen_ribbon_padding">16dp</dimen>
+
 </resources>

@@ -21,11 +21,14 @@ import com.android.internal.R;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Handler;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.FloatProperty;
@@ -1241,4 +1244,23 @@ public class SlidingChallengeLayout extends ViewGroup implements ChallengeLayout
             a.recycle();
         }
     }
+
+    @Override
+    public int getPaddingBottom() {
+        int padding = super.getPaddingBottom();
+
+        if (Settings.System.getBoolean(mContext.getContentResolver(),
+                Settings.System.NAV_HIDE_ENABLE, false)) {
+            int adjustment = Settings.System.getInt(
+                        mContext.getContentResolver(),
+                        Settings.System.NAVIGATION_BAR_HEIGHT,
+                        mContext.getResources()
+                                .getDimensionPixelSize(
+                                        com.android.internal.R.dimen.navigation_bar_height));
+            padding += adjustment;
+        }
+
+        return padding;
+    }
+
 }

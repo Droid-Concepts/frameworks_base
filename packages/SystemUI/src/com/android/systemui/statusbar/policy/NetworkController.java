@@ -357,7 +357,7 @@ public class NetworkController extends BroadcastReceiver {
         cluster.setIsAirplaneMode(mAirplaneMode, mAirplaneIconId);
     }
 
-    void notifySignalsChangedCallbacks(NetworkSignalChangedCallback cb) {
+    public void notifySignalsChangedCallbacks(NetworkSignalChangedCallback cb) {
         // only show wifi in the cluster if connected or if wifi-only
         boolean wifiEnabled = mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature);
         String wifiDesc = wifiEnabled ?
@@ -1196,7 +1196,6 @@ public class NetworkController extends BroadcastReceiver {
         if (customLabel != null && customLabel.length() > 0) {
             combinedLabel = customLabel;
             mobileLabel = customLabel;
-            wifiLabel = customLabel;
         }
 
         if (DEBUG) {

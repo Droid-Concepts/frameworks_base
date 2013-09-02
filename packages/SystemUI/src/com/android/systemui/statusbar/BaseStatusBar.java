@@ -26,11 +26,14 @@ import com.android.internal.widget.SizeAdaptiveLayout;
 import com.android.systemui.R;
 import com.android.systemui.SearchPanelView;
 import com.android.systemui.SystemUI;
+import com.android.systemui.TransparencyManager;
 import com.android.systemui.recent.RecentTasksLoader;
 import com.android.systemui.recent.RecentsActivity;
 import com.android.systemui.recent.TaskDescription;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.tablet.StatusBarPanel;
+import com.android.systemui.statusbar.WidgetView;
+import com.android.systemui.aokp.AppWindow;
 
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
@@ -46,6 +49,7 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
+import android.content.res.Resources.NotFoundException;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -98,6 +102,9 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected static final int MSG_SHOW_INTRUDER = 1026;
     protected static final int MSG_HIDE_INTRUDER = 1027;
 
+    private WidgetView mWidgetView;
+    private AppWindow mAppWindow;
+
     protected static final boolean ENABLE_INTRUDERS = false;
 
     // Should match the value in PhoneWindowManager
@@ -141,6 +148,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected WindowManager mWindowManager;
     protected IWindowManager mWindowManagerService;
     protected Display mDisplay;
+
+    public TransparencyManager mTransparencyManager;
 
     private boolean mDeviceProvisioned = false;
 
@@ -233,9 +242,11 @@ public abstract class BaseStatusBar extends SystemUI implements
         } catch (RemoteException ex) {
             // If the system process isn't there we're doomed anyway.
         }
-
+        mTransparencyManager = new TransparencyManager(mContext);
         createAndAddWindows();
-
+        // create WidgetView
+        mWidgetView = new WidgetView(mContext,null);
+        mAppWindow = new AppWindow(mContext,null);
         disable(switches[0]);
         setSystemUiVisibility(switches[1], 0xffffffff);
         topAppWindowChanged(switches[2] != 0);
@@ -347,10 +358,13 @@ public abstract class BaseStatusBar extends SystemUI implements
             } catch (NameNotFoundException ex) {
                 Slog.e(TAG, "Failed looking up ApplicationInfo for " + sbn.getPackageName(), ex);
             }
-            if (version > 0 && version < Build.VERSION_CODES.GINGERBREAD) {
-                content.setBackgroundResource(R.drawable.notification_row_legacy_bg);
-            } else {
-                content.setBackgroundResource(com.android.internal.R.drawable.notification_bg);
+            try {
+                if (version > 0 && version < Build.VERSION_CODES.GINGERBREAD) {
+                    content.setBackgroundResource(R.drawable.notification_row_legacy_bg);
+                } else {
+                    content.setBackgroundResource(com.android.internal.R.drawable.notification_bg);
+                }
+            } catch (NotFoundException ignore) {
             }
         }
     }
@@ -998,7 +1012,12 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
         }
     }
-
+    // To be used to tell StatusBar to inflate NavBar/SystemBar
+    // boolean to launch NavRing at same time
+    protected abstract void showBar(boolean showSearch);
+    protected abstract void setSearchLightOn(boolean on);
+    // used to tell statusbar that NavBar/Systembar has been touched - in order to reset AutoHide Timer
+    protected abstract void onBarTouchEvent(MotionEvent ev);
     protected abstract void haltTicker();
     protected abstract void setAreThereNotifications();
     protected abstract void updateNotificationIcons();
