@@ -1654,7 +1654,6 @@ public class PhoneStatusBar extends BaseStatusBar {
             }
         }
         mTransparencyManager.update();
-        mStatusBarView.updateBackgroundAlpha();
     }
 
     @Override
@@ -2370,7 +2369,6 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     public void topAppWindowChanged(boolean showMenu) {
         mTransparencyManager.update();
-        mStatusBarView.updateBackgroundAlpha();
         if (DEBUG) {
             Slog.d(TAG, (showMenu?"showing":"hiding") + " the MENU button");
         }
