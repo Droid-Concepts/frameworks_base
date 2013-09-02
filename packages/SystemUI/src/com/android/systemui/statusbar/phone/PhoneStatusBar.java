@@ -114,8 +114,6 @@ import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.policy.OnSizeChangedListener;
 import com.android.systemui.statusbar.policy.Prefs;
 import com.android.systemui.statusbar.powerwidget.PowerWidget;
-<<<<<<< HEAD
-=======
 import com.android.systemui.statusbar.toggles.ToggleManager;
 import com.android.systemui.aokp.AwesomeAction;
 import com.android.internal.util.aokp.AokpRibbonHelper;
@@ -124,7 +122,6 @@ import com.android.systemui.aokp.AokpSwipeRibbon;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
->>>>>>> remotes/cp/dd43-a
 
 public class PhoneStatusBar extends BaseStatusBar {
     static final String TAG = "PhoneStatusBar";
