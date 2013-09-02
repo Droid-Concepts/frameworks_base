@@ -108,6 +108,13 @@ public class PhoneStatusBarView extends PanelBar {
         }
     };
 
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateBackgroundAlpha();
+        }
+    };
+
     public PhoneStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -329,14 +336,14 @@ public class PhoneStatusBarView extends PanelBar {
         if (panel.getAlpha() != alpha) {
             panel.setAlpha(alpha);
         }
-        updateBackgroundAlpha(frac);
+        updateBackgroundAlpha();
         mBar.updateCarrierAndWifiLabelVisibility(false);
     }
 
     /*
      * ]0 < alpha < 1[
      */
-    protected void setBackgroundAlpha(float alpha) {
+    public void setBackgroundAlpha(float alpha) {
         Drawable bg = getBackground();
         if (bg == null)
             return;
