@@ -2004,5 +2004,6 @@
   <java-symbol type="dimen" name="lockscreen_ribbon_padding" />
   <java-symbol type="anim" name="recents_fade_in" />
   <java-symbol type="anim" name="recents_fade_out" />
+  <java-symbol type="drawable" name="ic_empty" />
 
 </resources>
