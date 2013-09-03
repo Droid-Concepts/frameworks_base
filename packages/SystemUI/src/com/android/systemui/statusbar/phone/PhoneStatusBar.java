@@ -3069,6 +3069,7 @@ public class PhoneStatusBar extends BaseStatusBar {
             disableAutoHide();
         }
         updateRibbonTargets();
+        setNotificationWallpaperHelper();
     }
 
     private void setNotificationWallpaperHelper() {
