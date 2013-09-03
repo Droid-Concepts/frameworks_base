@@ -117,7 +117,18 @@ public class TabletStatusBar extends BaseStatusBar implements
     private static final int NOTIFICATION_PRIORITY_MULTIPLIER = 10; // see NotificationManagerService
     private static final int HIDE_ICONS_BELOW_SCORE = Notification.PRIORITY_LOW * NOTIFICATION_PRIORITY_MULTIPLIER;
 
-    // The height of the bar, as definied by the build.  It may be taller if we're plugged
+    // used for calculating weights of Nav controls & Notification Area:
+    private static final float NAVBAR_MIN_LAND = 40f;
+    private static final float NAVBAR_MIN_PORTRAIT = 35f;
+    private static final float NAVBAR_MAX_LAND = 65f;
+    private static final float NAVBAR_MAX_PORTRAIT = 60f;
+    private static final float NAVBAR_BUTTON_WEIGHT_LAND = 10f;
+    private static final float NAVBAR_BUTTON_WEIGHT_PORTRAIT = 15f;
+    private static final float NAVBAR_BASE_AVAIL = 95f;
+    // using 100% as total bar length.  5% is used for space bar in the initial layout.
+    // that leaves 95% avail for NavBar & Notification area.
+
+        // The height of the bar, as definied by the build.  It may be taller if we're plugged
     // into hdmi.
     int mNaturalBarHeight = -1;
     int mUserBarHeight , mUserBarHeightLand = -1;
@@ -125,6 +136,9 @@ public class TabletStatusBar extends BaseStatusBar implements
     int mIconHPadding = -1;
     int mNavIconWidth = -1;
     int mMenuNavIconWidth = -1;
+    int mNumberOfButtons = 3;
+    float mWidthLand = 0f;
+    float mWidthPort = 0f;
     private int mMaxNotificationIcons = 5;
 
     TabletStatusBarView mStatusBarView;
@@ -395,6 +409,34 @@ public class TabletStatusBar extends BaseStatusBar implements
     @Override
     public void start() {
         super.start(); // will add the main bar view
+    }
+
+   public void UpdateWeights(boolean landscape) {
+        float nav = landscape ? NAVBAR_MIN_LAND : NAVBAR_MIN_PORTRAIT;
+        if (landscape) {
+           if (mWidthLand < 1) {
+                float min = NAVBAR_MIN_LAND;
+                float max = NAVBAR_MAX_LAND;
+                float weight = NAVBAR_BUTTON_WEIGHT_LAND;
+                nav = Math.max(min,
+                              Math.min(max, mNumberOfButtons * weight));
+           } else {
+                nav = mWidthLand + 30f;
+           }
+        } else {
+           if (mWidthPort < 1) {
+                float min = NAVBAR_MIN_PORTRAIT;
+                float max = NAVBAR_MAX_PORTRAIT;
+                float weight = NAVBAR_BUTTON_WEIGHT_PORTRAIT;
+                nav = Math.max(min,
+                              Math.min(max, mNumberOfButtons * weight));
+           } else {
+                nav = mWidthPort + 30f;
+           }
+        }
+        final float notif = NAVBAR_BASE_AVAIL - nav;
+        mNavigationArea.setLayoutParams(new LinearLayout.LayoutParams(0,LayoutParams.MATCH_PARENT,nav));
+        mNotificationHolder.setLayoutParams(new LinearLayout.LayoutParams(0,LayoutParams.MATCH_PARENT,notif));
     }
 
     private static void copyNotifications(ArrayList<Pair<IBinder, StatusBarNotification>> dest,
