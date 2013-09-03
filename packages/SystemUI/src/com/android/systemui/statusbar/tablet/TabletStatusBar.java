@@ -83,6 +83,7 @@ import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.policy.Prefs;
 
 import java.io.FileDescriptor;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -119,6 +120,7 @@ public class TabletStatusBar extends BaseStatusBar implements
     // The height of the bar, as definied by the build.  It may be taller if we're plugged
     // into hdmi.
     int mNaturalBarHeight = -1;
+    int mUserBarHeight , mUserBarHeightLand = -1;
     int mIconSize = -1;
     int mIconHPadding = -1;
     int mNavIconWidth = -1;
@@ -1630,5 +1632,10 @@ public class TabletStatusBar extends BaseStatusBar implements
     protected boolean shouldDisableNavbarGestures() {
         return mNotificationPanel.getVisibility() == View.VISIBLE
                 || (mDisabled & StatusBarManager.DISABLE_HOME) != 0;
+    }
+
+    private boolean isLandscape () {
+        Configuration config = mContext.getResources().getConfiguration();
+        return (config.orientation == Configuration.ORIENTATION_LANDSCAPE);
     }
 }
