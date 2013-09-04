@@ -33,7 +33,6 @@ import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.service.notification.StatusBarNotification;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -241,6 +240,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     View mFlipSettingsView;
     QuickSettingsContainerView mSettingsContainer;
     int mSettingsPanelGravity;
+    private ShitChangedObserver mShitChangedObserver;
 
     // top bar
     View mNotificationPanelHeader;
@@ -823,6 +823,9 @@ public class PhoneStatusBar extends BaseStatusBar {
                                     | View.STATUS_BAR_DISABLE_SYSTEM_INFO);
                 }
             }
+            // Start observing for changes
+            mShitChangedObserver = new ShitChangedObserver(mHandler);
+            mShitChangedObserver.startObserving();
             mToggleManager.updateSettings();
         }
 
@@ -3063,18 +3066,36 @@ public class PhoneStatusBar extends BaseStatusBar {
             setupAutoHide();
         } else if (mGesturePanel != null) {
             disableAutoHide();
-
-        cr.registerContentObserver(
-                Settings.System.getUriFor(Settings.System.NOTIF_WALLPAPER_ALPHA),
-                false, this);
-        setNotificationWallpaperHelper();
-
-        cr.registerContentObserver(
-                Settings.System.getUriFor(Settings.System.NOTIF_ALPHA),
-                false, this);
         }
         updateRibbonTargets();
-        setNotificationWallpaperHelper();
+    }
+
+    /**
+     * ContentObserver to watch for notification wallpaper/alpha and other shit
+     * @author cphelps76
+     */
+    private class ShitChangedObserver extends ContentObserver {
+        public ShitChangedObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            setNotificationWallpaperHelper();
+        }
+
+        public void startObserving() {
+            final ContentResolver cr = mContext.getContentResolver();
+
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.NOTIF_WALLPAPER_ALPHA),
+                    false, this);
+            setNotificationWallpaperHelper();
+
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.NOTIF_ALPHA),
+                    false, this);
+        }
     }
 
     private void setNotificationWallpaperHelper() {
