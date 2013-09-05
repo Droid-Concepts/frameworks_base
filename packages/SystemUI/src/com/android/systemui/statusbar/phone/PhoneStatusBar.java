@@ -413,12 +413,15 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.RIBBON_ICON_COLORIZE[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.RIBBON_TEXT_COLOR[AokpRibbonHelper.QUICK_SETTINGS]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIF_ALPHA), false, this);
             update();
         }
 
         @Override
         public void onChange(boolean selfChange) {
             update();
+            setNotificationWallpaperHelper();
         }
 
         public void update() {
@@ -1526,7 +1529,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                 })
                 .start();
         }
-
+        setNotificationWallpaperHelper();
         updateCarrierAndWifiLabelVisibility(false);
     }
 
