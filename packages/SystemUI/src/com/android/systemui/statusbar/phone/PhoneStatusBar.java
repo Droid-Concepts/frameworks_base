@@ -421,6 +421,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         @Override
         public void onChange(boolean selfChange) {
             update();
+            updateSettings();
             setNotificationWallpaperHelper();
         }
 
