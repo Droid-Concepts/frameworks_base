@@ -2010,4 +2010,7 @@
   <java-symbol type="anim" name="recents_fade_out" />
   <java-symbol type="drawable" name="ic_empty" />
 
+  <!-- Expanded desktop default set -->
+  <java-symbol type="string" name="expanded_mode_default_set" />
+
 </resources>
