@@ -3150,6 +3150,13 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_BACKGROUND_VALUE = "lockscreen_background_VALUE";
 
+         /**
+         * Expanded desktop mode
+         * 0 = none, 1 = hide only navbar, 2 = hide only statusbar, 3 = hide both
+         * @hide
+         */
+        public static final String EXPANDED_DESKTOP_MODE = "expanded_desktop_mode";
+
         /**
          * Used as a flag to determine if we have statusbar hidden
          * @hide
@@ -3863,6 +3870,12 @@ public final class Settings {
          */
         public static final String APP_WINDOW_ANIMATION_TYPE = "app_window_animation_type";
 
+         /**
+         * Statusbar State
+         * @hide
+         */
+        public static final String EXPANDED_DESKTOP_STATE = "expanded_desktop_state";
+
         /**
          *
          * @hide
@@ -4031,6 +4044,13 @@ public final class Settings {
          * @hide
          */
         public static final String CUSTOM_TOGGLE_QTY = "custom_toggle_qty";
+
+        /**
+         * Whether power menu expanded desktop is enabled
+         * @hide
+         */
+        public static final String POWER_MENU_EXPANDED_DESKTOP_ENABLED = "power_menu_expanded_desktop_enabled";
+
 
         /**
          * @hide
