@@ -181,6 +181,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int KEY_ACTION_KILL_APP = 11;
     private static final int KEY_ACTION_LAST_APP = 12;
     private static final int KEY_ACTION_CUSTOM_APP = 13;
+    private static final int KEY_ACTION_TORCH = 14;
 
     // Masks for checking presence of hardware keys.
     // Must match values in core/res/res/values/config.xml
@@ -1105,6 +1106,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             Settings.System.EXPANDED_DESKTOP_STATE, expandDesktopModeOn ? 0 : 1);
                     break;
                 default:
+                    break;
+                case KEY_ACTION_TORCH:
+                    mContext.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
                     break;
             }
         } catch (NumberFormatException e) {
