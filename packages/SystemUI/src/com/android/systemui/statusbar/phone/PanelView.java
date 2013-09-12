@@ -38,7 +38,7 @@ public class PanelView extends FrameLayout {
     public static final boolean DEBUG = PanelBar.DEBUG;
     public static final String TAG = PanelView.class.getSimpleName();
 
-    public static final boolean DEBUG_NAN = true; // http://b/7686690
+    public static final boolean DEBUG_NAN = false; // http://b/7686690
 
     public final void LOG(String fmt, Object... args) {
         if (!DEBUG) return;
@@ -307,6 +307,7 @@ public class PanelView extends FrameLayout {
                 post(mStopAnimator);
             }
         } else {
+            if (DEBUG)
             Slog.v(TAG, "animationTick called with dtms=" + dtms + "; nothing to do (h="
                     + mExpandedHeight + " v=" + mVel + ")");
         }
@@ -638,21 +639,5 @@ public class PanelView extends FrameLayout {
         } else if (DEBUG) {
             if (DEBUG) LOG("skipping expansion: is expanded");
         }
-    }
-
-    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
-        pw.println(String.format("[PanelView(%s): expandedHeight=%f fullHeight=%f closing=%s"
-                + " tracking=%s rubberbanding=%s justPeeked=%s peekAnim=%s%s timeAnim=%s%s"
-                + "]",
-                this.getClass().getSimpleName(),
-                getExpandedHeight(),
-                getFullHeight(),
-                mClosing?"T":"f",
-                mTracking?"T":"f",
-                mRubberbanding?"T":"f",
-                mJustPeeked?"T":"f",
-                mPeekAnimator, ((mPeekAnimator!=null && mPeekAnimator.isStarted())?" (started)":""),
-                mTimeAnimator, ((mTimeAnimator!=null && mTimeAnimator.isStarted())?" (started)":"")
-        ));
     }
 }
