@@ -4034,15 +4034,19 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                         }
                     }
                 }
+
            boolean launchPlayer = Settings.System.getInt(context.getContentResolver(),
                             Settings.System.HEADSET_CONNECT_PLAYER, 0) != 0;
-                    if (launchPlayer) {
                         Intent playerIntent = new Intent(Intent.ACTION_MAIN);
                         playerIntent.addCategory(Intent.CATEGORY_APP_MUSIC);
                         playerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(playerIntent);
-                       }
-
+                        try {
+                            context.startActivity(playerIntent);
+                        } catch (ActivityNotFoundException e) {
+                            Log.w(TAG, "No music player found to start after headset connection");
+                        }
+                    }
+          
             } else if (action.equals(Intent.ACTION_USB_AUDIO_ACCESSORY_PLUG) ||
                            action.equals(Intent.ACTION_USB_AUDIO_DEVICE_PLUG)) {
                 state = intent.getIntExtra("state", 0);
