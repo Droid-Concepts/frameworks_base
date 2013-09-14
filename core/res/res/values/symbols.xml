@@ -1913,6 +1913,7 @@
 
   <!-- Lockscreen -->
   <java-symbol type="bool" name="config_disableHomeUnlockSetting" />
+  <java-symbol type="id" name="expand_challenge_handle" />
 
   <!-- Irda Service -->
   <java-symbol type="bool" name="config_enableIrdaManagerService" />
