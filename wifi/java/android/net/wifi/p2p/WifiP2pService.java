@@ -938,7 +938,34 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                     }
                     break;
                 }
+                case BLOCK_DISCOVERY:
+                    boolean blocked = (message.arg1 == ENABLED ? true : false);
+                    if (mDiscoveryBlocked == blocked) break;
+                    mDiscoveryBlocked = blocked;
+                    if (blocked) {
+                        if (mDiscoveryStarted) {
+                            mWifiNative.p2pStopFind();
+                        }
+                        mDiscoveryPostponed = true;
+                        try {
+                            StateMachine m = (StateMachine)message.obj;
+                            m.sendMessage(message.arg2);
+                        } catch (Exception e) {
+                            loge("unable to send BLOCK_DISCOVERY response: " + e);
+                        }
+                    }
+                    if (!blocked && mDiscoveryPostponed) {
+                        mDiscoveryPostponed = false;
+                        mWifiNative.p2pFind(DISCOVER_TIMEOUT_S);
+                    }
+                    break;
                 case WifiP2pManager.DISCOVER_PEERS:
+                    if (mDiscoveryBlocked) {
+                    /* do not send discovery failure to apps.
+                       since discovery is postponed and not failed */
+                       loge("P2P_FIND is deffered");
+                       break;
+                    }
                     // do not send service discovery request while normal find operation.
                     clearSupplicantServiceRequest();
                     if (mWifiNative.p2pFind(DISCOVER_TIMEOUT_S)) {
