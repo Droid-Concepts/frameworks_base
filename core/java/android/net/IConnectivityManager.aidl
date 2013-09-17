@@ -129,9 +129,15 @@ interface IConnectivityManager
 
     void captivePortalCheckComplete(in NetworkInfo info);
 
+    void captivePortalCheckCompleted(in NetworkInfo info, boolean isCaptivePortal);
+
     void supplyMessenger(int networkType, in Messenger messenger);
 
     int findConnectionTypeForIface(in String iface);
 
     int checkMobileProvisioning(boolean sendNotification, int suggestedTimeOutMs, in ResultReceiver resultReceiver);
+
+    String getMobileProvisioningUrl();
+
+    String getMobileRedirectedProvisioningUrl();
 }
