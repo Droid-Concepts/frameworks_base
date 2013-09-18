@@ -4041,6 +4041,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                         playerIntent.addCategory(Intent.CATEGORY_APP_MUSIC);
                         playerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(playerIntent);
+                       }
 
             } else if (action.equals(Intent.ACTION_USB_AUDIO_ACCESSORY_PLUG) ||
                            action.equals(Intent.ACTION_USB_AUDIO_DEVICE_PLUG)) {
