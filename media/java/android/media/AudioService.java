@@ -4035,8 +4035,11 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                     }
                 }
 
-           boolean launchPlayer = Settings.System.getInt(context.getContentResolver(),
-                            Settings.System.HEADSET_CONNECT_PLAYER, 0) != 0;
+         boolean launchPlayer = Settings.System.getIntForUser(
+                            context.getContentResolver(),
+                            Settings.System.HEADSET_CONNECT_PLAYER,
+                            0, UserHandle.USER_CURRENT) != 0;
+                    if (launchPlayer) {
                         Intent playerIntent = new Intent(Intent.ACTION_MAIN);
                         playerIntent.addCategory(Intent.CATEGORY_APP_MUSIC);
                         playerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
