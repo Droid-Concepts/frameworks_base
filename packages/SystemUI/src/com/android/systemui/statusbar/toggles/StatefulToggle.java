@@ -40,6 +40,8 @@ public abstract class StatefulToggle extends BaseToggle {
                 break;
         }
         updateCurrentState(newState);
+        vibrateOnTouch();
+        collapseShadePref();
     }
 
     public State getState() {
