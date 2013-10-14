@@ -70,9 +70,6 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.LruCache;
 
-import android.util.Log;
-import android.text.TextUtils;
-import android.util.LruCache;
 import com.android.internal.R;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.util.AsyncChannel;
@@ -103,7 +100,6 @@ import java.util.regex.Pattern;
  */
 public class WifiStateMachine extends StateMachine {
 
-    private static final String TAG = "WifiStateMachine";
     private static final String NETWORKTYPE = "WIFI";
     private static final boolean DBG = false;
 
@@ -155,10 +151,6 @@ public class WifiStateMachine extends StateMachine {
     private boolean mBluetoothConnectionActive = false;
 
     private PowerManager.WakeLock mSuspendWakeLock;
-
-    private List<WifiChannel> mSupportedChannels;
-    private int startSafeChannel = 0;
-    private int endSafeChannel = 0;
 
     /**
      * Interval in milliseconds between polling for RSSI
@@ -522,8 +514,6 @@ public class WifiStateMachine extends StateMachine {
     private static final int DRIVER_STOP_REQUEST = 0;
     private static final String ACTION_DELAYED_DRIVER_STOP =
         "com.android.server.WifiManager.action.DELAYED_DRIVER_STOP";
-    private static final String ACTION_SAFE_WIFI_CHANNELS_CHANGED =
-           "qualcomm.intent.action.SAFE_WIFI_CHANNELS_CHANGED";
 
     /**
      * Keep track of whether WIFI is running.
@@ -609,11 +599,7 @@ public class WifiStateMachine extends StateMachine {
                 }
             },new IntentFilter(ConnectivityManager.ACTION_TETHER_STATE_CHANGED));
 
-       IntentFilter filter = new IntentFilter();
-       filter.addAction(ACTION_SAFE_WIFI_CHANNELS_CHANGED);
-       mContext.registerReceiver(WifiStateReceiver, filter);
-
-       mContext.registerReceiver(
+        mContext.registerReceiver(
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
@@ -717,36 +703,6 @@ public class WifiStateMachine extends StateMachine {
         mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
     }
 
-    private BroadcastReceiver WifiStateReceiver = new BroadcastReceiver() {
-
-         public void onReceive(Context context, Intent intent) {
-             if (intent.getAction().equals(
-                 ACTION_SAFE_WIFI_CHANNELS_CHANGED)) {
-                 startSafeChannel = intent.getIntExtra("start_safe_channel", -1);
-                 endSafeChannel = intent.getIntExtra("end_safe_channel", -1);
-                 Log.d(TAG, "Received WIFI_CHANNELS_CHANGED broadcast");
-                 int state = syncGetWifiApState();
-                 if (state == WIFI_AP_STATE_ENABLED) {
-                     int autochannel = getSapAutoChannelSelection();
-                     Log.d(TAG,"autochannel=" + autochannel);
-                     if (1 == autochannel){
-                         int currentChannel = getSapOperatingChannel();
-                         if (currentChannel >= 0 &&
-                            (currentChannel < startSafeChannel ||
-                             currentChannel > endSafeChannel)) {
-                             //currently RIL passes only 2.4G channels so if the current operating
-                             // channel is 5G channel, do not restart SAP.
-                             if (currentChannel >= 1 &&  currentChannel <=14) {
-                                 Log.e(TAG, "Operating on restricted channel! Restart SAP");
-                                 restartSoftApIfOn();
-                             }
-                         }
-                     }
-                 }
-              }
-           }
-    };
-
     /*********************************************************
      * Methods exposed for public use
      ********************************************************/
@@ -832,42 +788,6 @@ public class WifiStateMachine extends StateMachine {
         WifiConfiguration ret = (WifiConfiguration) resultMsg.obj;
         resultMsg.recycle();
         return ret;
-    }
-
-    /**
-     * Function to set Channel range.
-    */
-    public void setChannelRange(int startchannel, int endchannel, int band) {
-       try {
-              Log.e(TAG, "setChannelRange");
-              mNwService.setChannelRange(startchannel, endchannel, band);
-           } catch(Exception e) {
-             loge("Exception in setChannelRange");
-           }
-    }
-
-    /**
-    *  Function to get SAP operating Channel
-    */
-    public int getSapOperatingChannel() {
-        try {
-            return mNwService.getSapOperatingChannel();
-        } catch(Exception e) {
-              loge("Exception in getSapOperatingChannel");
-              return -1;
-        }
-    }
-
-    /**
-    *  Function to get Auto Channel selection
-    */
-    public int getSapAutoChannelSelection() {
-        try {
-            return mNwService.getSapAutoChannelSelection();
-        } catch (Exception e) {
-             loge("Exception in getSapOperatingChannel");
-             return -1;
-        }
     }
 
     /**
@@ -1926,10 +1846,6 @@ public class WifiStateMachine extends StateMachine {
                     loge("Exception in softap start " + e);
                     try {
                         mNwService.stopAccessPoint(mInterfaceName);
-                        if (startSafeChannel!=0) {
-                           Log.e(TAG, "Calling setChannelRange ---startSoftApWithConfig()");
-                           setChannelRange(startSafeChannel, endSafeChannel, 0);
-                        }
                         mNwService.startAccessPoint(config, mInterfaceName);
                     } catch (Exception e1) {
                         loge("Exception in softap re-start " + e1);
@@ -3595,10 +3511,6 @@ public class WifiStateMachine extends StateMachine {
                 final WifiConfiguration config = (WifiConfiguration) message.obj;
 
                 if (config == null) {
-                   if (startSafeChannel!=0) {
-                       Log.e(TAG, "Calling setChannelRange ---CMD_START_AP SoftApStartingState()");
-                       setChannelRange(startSafeChannel, endSafeChannel , 0);
-                   }
                     mWifiApConfigChannel.sendMessage(CMD_REQUEST_AP_CONFIG);
                 } else {
                     mWifiApConfigChannel.sendMessage(CMD_SET_AP_CONFIG, config);
@@ -3835,14 +3747,5 @@ public class WifiStateMachine extends StateMachine {
         Message msg = Message.obtain();
         msg.arg2 = srcMsg.arg2;
         return msg;
-    }
-
-
-    private void restartSoftApIfOn() {
-        Log.e(TAG, "Disabling wifi ap");
-        setHostApRunning(null, false);
-        Log.e(TAG, "Enabling wifi ap");
-        setHostApRunning(null, true);
-        Log.e(TAG, "Restart softap Done");
     }
 }
