@@ -813,7 +813,6 @@ class ServerThread extends Thread {
                     Slog.e(TAG, "Failure starting Gesture Sensor Service", e);
                 }
             }
-       }
 
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
