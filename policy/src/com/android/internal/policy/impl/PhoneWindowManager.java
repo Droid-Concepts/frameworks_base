@@ -4577,20 +4577,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             case KeyEvent.KEYCODE_POWER: {
                 // handle power key long-press
-                if (mPowerButtonTorch && !isScreenOn) {
-                    if (down && !mTorchOn) {
-                        mHandler.postDelayed(mTorchLongPress, 1000);
-                        return 0;
-                    }
-
-                    if (up) {
-                        mHandler.removeCallbacks(mTorchLongPress);
-                        if (mTorchOn) {
-                            toggleTorch(false); // off
-                            return 0;
-                        }
-                    }
-                }
 
                 if ((mTopFullscreenOpaqueWindowState.getAttrs().flags
                         & WindowManager.LayoutParams.PREVENT_POWER_KEY) != 0){
