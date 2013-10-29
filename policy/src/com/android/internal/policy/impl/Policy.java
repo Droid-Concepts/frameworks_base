@@ -64,8 +64,8 @@ public class Policy implements IPolicy {
         return new PhoneLayoutInflater(context);
     }
 
-    public WindowManagerPolicy makeNewWindowManager() {
-        return new PhoneWindowManager(null);
+    public WindowManagerPolicy makeNewWindowManager(IDeviceHandler device) {
+        return new PhoneWindowManager(device);
     }
 
     public FallbackEventHandler makeNewFallbackEventHandler(Context context) {

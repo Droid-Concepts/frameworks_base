@@ -1098,7 +1098,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         mWindowManager = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
         Display d = mWindowManager.getDefaultDisplay();
-        mPolicy = new PhoneWindowManager(null);
+        mPolicy = new PhoneWindowManager(null); 
         d.getMetrics(mMetrics);
 
         synchronized (mInstallLock) {

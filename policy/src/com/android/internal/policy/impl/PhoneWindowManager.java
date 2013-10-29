@@ -238,102 +238,99 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     Context mContext;
     Context mUiContext;
-    private IWindowManager mWindowManager;
-    private WindowManagerFuncs mWindowManagerFuncs;
-    private PowerManager mPowerManager;
-    private IStatusBarService mStatusBarService;
+    IWindowManager mWindowManager;
+    WindowManagerFuncs mWindowManagerFuncs;
+    PowerManager mPowerManager;
+    IStatusBarService mStatusBarService;
     boolean mPreloadedRecentApps;
-    private final Object mServiceAquireLock = new Object();
-    private Vibrator mVibrator; // Vibrator for giving feedback of orientation changes
-    private SearchManager mSearchManager;
+    final Object mServiceAquireLock = new Object();
+    Vibrator mVibrator; // Vibrator for giving feedback of orientation changes
+    SearchManager mSearchManager;
 
     // Vibrator pattern for haptic feedback of a long press.
-    private long[] mLongPressVibePattern;
+    long[] mLongPressVibePattern;
 
     // Vibrator pattern for haptic feedback of virtual key press.
-    private long[] mVirtualKeyVibePattern;
-
+    long[] mVirtualKeyVibePattern;
+    
     // Vibrator pattern for a short vibration.
-    private long[] mKeyboardTapVibePattern;
+    long[] mKeyboardTapVibePattern;
 
     // Vibrator pattern for haptic feedback during boot when safe mode is disabled.
-    private long[] mSafeModeDisabledVibePattern;
-
+    long[] mSafeModeDisabledVibePattern;
+    
     // Vibrator pattern for haptic feedback during boot when safe mode is enabled.
-    private long[] mSafeModeEnabledVibePattern;
+    long[] mSafeModeEnabledVibePattern;
 
     /** If true, hitting shift & menu will broadcast Intent.ACTION_BUG_REPORT */
     boolean mEnableShiftMenuBugReports = false;
 
-    private boolean mHeadless;
-    private boolean mSafeMode;
-    private WindowState mStatusBar = null;
-    private boolean mHasSystemNavBar;
-    private int mStatusBarHeight;
-    private WindowState mNavigationBar = null;
-    private boolean mHasNavigationBar = false;
-    private boolean mCanHideNavigationBar = false;
-    private boolean mNavigationBarCanMove = false; // can the navigation bar ever move to the side?
-    private boolean mNavigationBarOnBottom = true; // is the navigation bar on the bottom *right now*?
-    private int[] mNavigationBarHeightForRotation = new int[4];
-    private int[] mNavigationBarWidthForRotation = new int[4];
-    private Intent closeAppWindow;
+    boolean mHeadless;
+    boolean mSafeMode;
+    WindowState mStatusBar = null;
+    boolean mHasSystemNavBar;
+    int mStatusBarHeight;
+    WindowState mNavigationBar = null;
+    boolean mHasNavigationBar = false;
+    boolean mCanHideNavigationBar = false;
+    boolean mNavigationBarCanMove = false; // can the navigation bar ever move to the side?
+    boolean mNavigationBarOnBottom = true; // is the navigation bar on the bottom *right now*?
+    int[] mNavigationBarHeightForRotation = new int[4];
+    int[] mNavigationBarWidthForRotation = new int[4];
 
-    private WindowState mKeyguard = null;
-    private KeyguardViewMediator mKeyguardMediator;
-    private GlobalActions mGlobalActions;
+    WindowState mKeyguard = null;
+    KeyguardViewMediator mKeyguardMediator;
+    GlobalActions mGlobalActions;
     volatile boolean mPowerKeyHandled; // accessed from input reader and handler thread
-    private boolean mPendingPowerKeyUpCanceled;
+    boolean mPendingPowerKeyUpCanceled;
     Handler mHandler;
-    private WindowState mLastInputMethodWindow = null;
-    private WindowState mLastInputMethodTargetWindow = null;
+    WindowState mLastInputMethodWindow = null;
+    WindowState mLastInputMethodTargetWindow = null;
 
-    private static final int RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS = 0;
-    private static final int RECENT_APPS_BEHAVIOR_EXIT_TOUCH_MODE_AND_SHOW = 1;
-    private static final int RECENT_APPS_BEHAVIOR_DISMISS = 2;
-    private static final int RECENT_APPS_BEHAVIOR_DISMISS_AND_SWITCH = 3;
+    static final int RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS = 0;
+    static final int RECENT_APPS_BEHAVIOR_EXIT_TOUCH_MODE_AND_SHOW = 1;
+    static final int RECENT_APPS_BEHAVIOR_DISMISS = 2;
+    static final int RECENT_APPS_BEHAVIOR_DISMISS_AND_SWITCH = 3;
 
-    private RecentApplicationsDialog mRecentAppsDialog;
-    private int mRecentAppsDialogHeldModifiers;
-    private boolean mLanguageSwitchKeyPressed;
+    RecentApplicationsDialog mRecentAppsDialog;
+    int mRecentAppsDialogHeldModifiers;
+    boolean mLanguageSwitchKeyPressed;
 
-    private int mLidState = LID_ABSENT;
-    private boolean mHaveBuiltInKeyboard;
+    int mLidState = LID_ABSENT;
+    boolean mHaveBuiltInKeyboard;
 
-    private boolean mSystemReady;
-    private boolean mSystemBooted;
-    private boolean mHdmiPlugged;
-    private boolean mWifiDisplayConnected;
-    private int mUiMode;
-    private int mDockMode = Intent.EXTRA_DOCK_STATE_UNDOCKED;
-    private int mLidOpenRotation;
-    private boolean mHasRemovableLid;
-    private int mCarDockRotation;
-    private int mDeskDockRotation;
-    private int mUndockedHdmiRotation;
-    private int mDemoHdmiRotation;
-    private boolean mDemoHdmiRotationLock;
+    boolean mSystemReady;
+    boolean mSystemBooted;
+    boolean mHdmiPlugged;
+    boolean mWifiDisplayConnected;
+    int mUiMode;
+    int mDockMode = Intent.EXTRA_DOCK_STATE_UNDOCKED;
+    int mLidOpenRotation;
+    boolean mHasRemovableLid;
+    int mCarDockRotation;
+    int mDeskDockRotation;
+    int mUndockedHdmiRotation;
+    int mDemoHdmiRotation;
+    boolean mDemoHdmiRotationLock;
 
-    private int mUserRotationMode = WindowManagerPolicy.USER_ROTATION_FREE;
-    private int mUserRotation = Surface.ROTATION_0;
-    private int mUserRotationAngles;
-    private boolean mAccelerometerDefault;
+    int mUserRotationMode = WindowManagerPolicy.USER_ROTATION_FREE;
+    int mUserRotation = Surface.ROTATION_0;
+    int mUserRotationAngles = -1;
+    boolean mAccelerometerDefault;
 
-    private int mAllowAllRotations = -1;
-    private boolean mCarDockEnablesAccelerometer;
-    private boolean mDeskDockEnablesAccelerometer;
-    private int mLidKeyboardAccessibility;
-    private int mLidNavigationAccessibility;
-    private boolean mLidControlsSleep;
-    private int mLongPressOnPowerBehavior = -1;
-    private boolean mScreenOnEarly = false;
-    private boolean mScreenOnFully = false;
-    private int mScreenOffReason;
-    private boolean mOrientationSensorEnabled = false;
-    private int mCurrentAppOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-    private boolean mHasSoftInput = false;
-    private int mBackKillTimeout;
-
+    int mAllowAllRotations = -1;
+    boolean mCarDockEnablesAccelerometer;
+    boolean mDeskDockEnablesAccelerometer;
+    int mLidKeyboardAccessibility;
+    int mLidNavigationAccessibility;
+    boolean mLidControlsSleep;
+    int mLongPressOnPowerBehavior = -1;
+    boolean mScreenOnEarly = false;
+    boolean mScreenOnFully = false;
+    boolean mOrientationSensorEnabled = false;
+    int mCurrentAppOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+    boolean mHasSoftInput = false;
+    int mBackKillTimeout;
     int mPointerLocationMode = 0; // guarded by mLock
     int mDeviceHardwareKeys;
     boolean mHasHomeKey;
@@ -343,8 +340,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mHasAppSwitchKey;
 
     // The last window we were told about in focusChanged.
-    private WindowState mFocusedWindow;
-    private IApplicationToken mFocusedApp;
+    WindowState mFocusedWindow;
+    IApplicationToken mFocusedApp;
 
     // Behavior of volume wake
     boolean mVolumeWakeScreen;
@@ -414,103 +411,103 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     // Pointer location view state, only modified on the mHandler Looper.
-    private PointerLocationInputEventReceiver mPointerLocationInputEventReceiver;
-    private PointerLocationView mPointerLocationView;
-    private InputChannel mPointerLocationInputChannel;
+    PointerLocationInputEventReceiver mPointerLocationInputEventReceiver;
+    PointerLocationView mPointerLocationView;
+    InputChannel mPointerLocationInputChannel;
 
     // The current size of the screen; really; extends into the overscan area of
     // the screen and doesn't account for any system elements like the status bar.
-    private int mOverscanScreenLeft, mOverscanScreenTop;
-    private int mOverscanScreenWidth, mOverscanScreenHeight;
+    int mOverscanScreenLeft, mOverscanScreenTop;
+    int mOverscanScreenWidth, mOverscanScreenHeight;
     // The current visible size of the screen; really; (ir)regardless of whether the status
     // bar can be hidden but not extending into the overscan area.
-    private int mUnrestrictedScreenLeft, mUnrestrictedScreenTop;
-    private int mUnrestrictedScreenWidth, mUnrestrictedScreenHeight;
+    int mUnrestrictedScreenLeft, mUnrestrictedScreenTop;
+    int mUnrestrictedScreenWidth, mUnrestrictedScreenHeight;
     // Like mOverscanScreen*, but allowed to move into the overscan region where appropriate.
-    private int mRestrictedOverscanScreenLeft, mRestrictedOverscanScreenTop;
-    private int mRestrictedOverscanScreenWidth, mRestrictedOverscanScreenHeight;
+    int mRestrictedOverscanScreenLeft, mRestrictedOverscanScreenTop;
+    int mRestrictedOverscanScreenWidth, mRestrictedOverscanScreenHeight;
     // The current size of the screen; these may be different than (0,0)-(dw,dh)
     // if the status bar can't be hidden; in that case it effectively carves out
     // that area of the display from all other windows.
-    private int mRestrictedScreenLeft, mRestrictedScreenTop;
-    private int mRestrictedScreenWidth, mRestrictedScreenHeight;
+    int mRestrictedScreenLeft, mRestrictedScreenTop;
+    int mRestrictedScreenWidth, mRestrictedScreenHeight;
     // During layout, the current screen borders accounting for any currently
     // visible system UI elements.
-    private int mSystemLeft, mSystemTop, mSystemRight, mSystemBottom;
+    int mSystemLeft, mSystemTop, mSystemRight, mSystemBottom;
     // For applications requesting stable content insets, these are them.
-    private int mStableLeft, mStableTop, mStableRight, mStableBottom;
+    int mStableLeft, mStableTop, mStableRight, mStableBottom;
     // For applications requesting stable content insets but have also set the
     // fullscreen window flag, these are the stable dimensions without the status bar.
-    private int mStableFullscreenLeft, mStableFullscreenTop;
-    private int mStableFullscreenRight, mStableFullscreenBottom;
+    int mStableFullscreenLeft, mStableFullscreenTop;
+    int mStableFullscreenRight, mStableFullscreenBottom;
     // During layout, the current screen borders with all outer decoration
     // (status bar, input method dock) accounted for.
-    private int mCurLeft, mCurTop, mCurRight, mCurBottom;
+    int mCurLeft, mCurTop, mCurRight, mCurBottom;
     // During layout, the frame in which content should be displayed
     // to the user, accounting for all screen decoration except for any
     // space they deem as available for other content.  This is usually
     // the same as mCur*, but may be larger if the screen decor has supplied
     // content insets.
-    private int mContentLeft, mContentTop, mContentRight, mContentBottom;
+    int mContentLeft, mContentTop, mContentRight, mContentBottom;
     // During layout, the current screen borders along which input method
     // windows are placed.
-    private int mDockLeft, mDockTop, mDockRight, mDockBottom;
+    int mDockLeft, mDockTop, mDockRight, mDockBottom;
     // During layout, the layer at which the doc window is placed.
-    private int mDockLayer;
+    int mDockLayer;
     // During layout, this is the layer of the status bar.
-    private int mStatusBarLayer;
-    private int mLastSystemUiFlags;
+    int mStatusBarLayer;
+    int mLastSystemUiFlags;
     // Bits that we are in the process of clearing, so we want to prevent
     // them from being set by applications until everything has been updated
     // to have them clear.
-    private int mResettingSystemUiFlags = 0;
+    int mResettingSystemUiFlags = 0;
     // Bits that we are currently always keeping cleared.
-    private int mForceClearedSystemUiFlags = 0;
+    int mForceClearedSystemUiFlags = 0;
     // What we last reported to system UI about whether the compatibility
     // menu needs to be displayed.
-    private boolean mLastFocusNeedsMenu = false;
+    boolean mLastFocusNeedsMenu = false;
 
-    private FakeWindow mHideNavFakeWindow = null;
+    FakeWindow mHideNavFakeWindow = null;
 
-    private static final Rect mTmpParentFrame = new Rect();
-    private static final Rect mTmpDisplayFrame = new Rect();
-    private static final Rect mTmpOverscanFrame = new Rect();
-    private static final Rect mTmpContentFrame = new Rect();
-    private static final Rect mTmpVisibleFrame = new Rect();
-    private static final Rect mTmpNavigationFrame = new Rect();
-
-    private WindowState mTopFullscreenOpaqueWindowState;
-    private boolean mTopIsFullscreen;
-    private boolean mForceStatusBar;
-    private boolean mForceStatusBarFromKeyguard;
-    private boolean mHideLockScreen;
-    private boolean mForcingShowNavBar;
-    private int mForcingShowNavBarLayer;
+    static final Rect mTmpParentFrame = new Rect();
+    static final Rect mTmpDisplayFrame = new Rect();
+    static final Rect mTmpOverscanFrame = new Rect();
+    static final Rect mTmpContentFrame = new Rect();
+    static final Rect mTmpVisibleFrame = new Rect();
+    static final Rect mTmpNavigationFrame = new Rect();
+    
+    WindowState mTopFullscreenOpaqueWindowState;
+    boolean mTopIsFullscreen;
+    boolean mForceStatusBar;
+    boolean mForceStatusBarFromKeyguard;
+    boolean mHideLockScreen;
+    boolean mForcingShowNavBar;
+    int mForcingShowNavBarLayer;
 
     // States of keyguard dismiss.
     private static final int DISMISS_KEYGUARD_NONE = 0; // Keyguard not being dismissed.
     private static final int DISMISS_KEYGUARD_START = 1; // Keyguard needs to be dismissed.
     private static final int DISMISS_KEYGUARD_CONTINUE = 2; // Keyguard has been dismissed.
-    private int mDismissKeyguard = DISMISS_KEYGUARD_NONE;
+    int mDismissKeyguard = DISMISS_KEYGUARD_NONE;
 
     /** The window that is currently dismissing the keyguard. Dismissing the keyguard must only
      * be done once per window. */
     private WindowState mWinDismissingKeyguard;
 
-    private boolean mShowingLockscreen;
-    private boolean mShowingDream;
-    private boolean mDreamingLockscreen;
-    private boolean mHomePressed;
-    private boolean mHomeConsumed;
-    private boolean mMenuPressed;
-    private boolean mAppSwitchLongPressed;
-    private boolean mHomeDoubleTapPending;
-    private Intent mHomeIntent;
-    private Intent mCarDockIntent;
-    private Intent mDeskDockIntent;
-    private boolean mSearchKeyShortcutPending;
-    private boolean mConsumeSearchKeyUp;
-    private boolean mAssistKeyLongPressed;
+    boolean mShowingLockscreen;
+    boolean mShowingDream;
+    boolean mDreamingLockscreen;
+    boolean mHomePressed;
+    boolean mHomeConsumed;
+    boolean mMenuPressed;
+    boolean mAppSwitchLongPressed;
+    boolean mHomeDoubleTapPending;
+    Intent mHomeIntent;
+    Intent mCarDockIntent;
+    Intent mDeskDockIntent;
+    boolean mSearchKeyShortcutPending;
+    boolean mConsumeSearchKeyUp;
+    boolean mAssistKeyLongPressed;
 
     // Tracks user-customisable behavior for certain key events
     private String mPressOnHomeBehavior;
@@ -529,32 +526,33 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mIsVirtualKeypress;
 
     // support for activating the lock screen while the screen is on
-    private boolean mAllowLockscreenWhenOn;
-    private int mLockScreenTimeout;
-    private boolean mLockScreenTimerActive;
+    boolean mAllowLockscreenWhenOn;
+    int mLockScreenTimeout;
+    boolean mLockScreenTimerActive;
 
     // Behavior of ENDCALL Button.  (See Settings.System.END_BUTTON_BEHAVIOR.)
-    private int mEndcallBehavior;
+    int mEndcallBehavior;
 
     // Behavior of POWER button while in-call and screen on.
     // (See Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR.)
-    private int mIncallPowerBehavior;
+    int mIncallPowerBehavior;
 
-    private Display mDisplay;
+    Display mDisplay;
 
     // Behavior of HOME button during incomming call ring.
     // (See Settings.Secure.RING_HOME_BUTTON_BEHAVIOR.)
     int mRingHomeBehavior;
 
-    private int mLandscapeRotation = 0;  // default landscape rotation
-    private int mSeascapeRotation = 0;   // "other" landscape rotation, 180 degrees from mLandscapeRotation
-    private int mPortraitRotation = 0;   // default portrait rotation
-    private int mUpsideDownRotation = 0; // "other" portrait rotation
+    int mShortSizeDp; 
+    int mLandscapeRotation = 0;  // default landscape rotation
+    int mSeascapeRotation = 0;   // "other" landscape rotation, 180 degrees from mLandscapeRotation
+    int mPortraitRotation = 0;   // default portrait rotation
+    int mUpsideDownRotation = 0; // "other" portrait rotation
 
-    private int mOverscanLeft = 0;
-    private int mOverscanTop = 0;
-    private int mOverscanRight = 0;
-    private int mOverscanBottom = 0;
+    int mOverscanLeft = 0;
+    int mOverscanTop = 0;
+    int mOverscanRight = 0;
+    int mOverscanBottom = 0;
 
     // What we do when the user double-taps on home
     private int mDoubleTapOnHomeBehavior;
@@ -578,19 +576,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mNeedUpdateSettings;
     private KeyguardManager mKeyguardManager;
 
-    // HW overlays state
-    int mDisableOverlays = 0;
-
-    private int mSystemDpi = 0;
-    private int mSystemUiDpi = 0;
-    private int mSystemUiLayout = 0;
-    private int mNavigationBarDpi = 0;
-    private int mStatusBarDpi = 0;
-
-    private SettingsObserver mSettingsObserver;
-    private ShortcutManager mShortcutManager;
-    private PowerManager.WakeLock mBroadcastWakeLock;
-    private boolean mHavePendingMediaKeyRepeatWithWakeLock;
+    SettingsObserver mSettingsObserver;
+    ShortcutManager mShortcutManager;
+    PowerManager.WakeLock mBroadcastWakeLock;
+    boolean mHavePendingMediaKeyRepeatWithWakeLock;
 
     // Maps global key codes to the components that will handle them.
     private GlobalKeyManager mGlobalKeyManager;
@@ -631,12 +620,50 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     };
 
-    private class SettingsObserver extends ContentObserver {
+    PowerMenuReceiver mPowerMenuReceiver;
+    class PowerMenuReceiver extends BroadcastReceiver {
+        private boolean mIsRegistered = false;
+
+        public PowerMenuReceiver(Context context) {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (action.equals(Intent.ACTION_POWERMENU)) {
+                showGlobalActionsDialog();
+            }
+            if (action.equals(Intent.ACTION_POWERMENU_REBOOT)) {
+                mWindowManagerFuncs.rebootTile(); 
+            }
+
+        }
+
+        private void registerSelf() {
+            if (!mIsRegistered) {
+                mIsRegistered = true;
+
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(Intent.ACTION_POWERMENU);
+                filter.addAction(Intent.ACTION_POWERMENU_REBOOT);
+                mContext.registerReceiver(mPowerMenuReceiver, filter);
+            }
+        }
+
+        private void unregisterSelf() {
+            if (mIsRegistered) {
+                mIsRegistered = false;
+                mContext.unregisterReceiver(this);
+            }
+        }
+    } 
+
+    class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
         }
 
-        protected void observe() {
+        void observe() {
             // Observe all users' changes
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -2440,7 +2467,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mVolumeDownKeyConsumedByScreenshotChord = false;
                 }
                 return -1;
+            } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP
+                    && mVolumeUpKeyConsumedByChord) {
+                if (!down) {
+                    mVolumeUpKeyConsumedByChord = false;
+                }
+                return -1;
             }
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && !down) {
+            mHandler.removeCallbacks(mBackLongPress);
         }
 
         // First we always handle the home key here, so applications
@@ -2555,7 +2592,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // Hijack modified menu keys for debugging features
             final int chordBug = KeyEvent.META_SHIFT_ON;
 
-            if (virtualKey) {
+            if (virtualKey || keyguardOn) {
                 // Let the app handle the key
                 return 0;
             }
@@ -2588,7 +2625,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         return -1;
                     }
                 } else if (longPress) {
-                    if (!keyguardOn && mLongPressOnMenuBehavior != KEY_ACTION_NOTHING) {
+                    if (mLongPressOnMenuBehavior != KEY_ACTION_NOTHING) {
                         if (mLongPressOnMenuBehavior != KEY_ACTION_APP_SWITCH) {
                             cancelPreloadRecentApps();
                         }
@@ -2606,7 +2643,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if (mPressOnMenuBehavior != KEY_ACTION_APP_SWITCH) {
                         cancelPreloadRecentApps();
                     }
-                    if (!canceled && !keyguardOn) {
+                    if (!canceled) {
                         performKeyAction(mPressOnMenuBehavior);
                     }
                 }

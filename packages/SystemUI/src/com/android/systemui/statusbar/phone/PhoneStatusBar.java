@@ -2511,23 +2511,41 @@ public class PhoneStatusBar extends BaseStatusBar {
             lightsOnObjs.add(ObjectAnimator.ofFloat(battery, View.ALPHA, 1));
             lightsOnObjs.add(ObjectAnimator.ofFloat(battery2, View.ALPHA, 1));
             lightsOnObjs.add(ObjectAnimator.ofFloat(battery3, View.ALPHA, 1));
-            lightsOnObjs.add(ObjectAnimator.ofFloat(clock, View.ALPHA, 1));
-
+            lightsOnObjs.add(ObjectAnimator.ofFloat(traffic, View.ALPHA, 1));
+            if (dockBattery != null) {
+                lightsOnObjs.add(ObjectAnimator.ofFloat(dockBattery, View.ALPHA, 1));
+            }
+            if (dockBattery2 != null) {
+                lightsOnObjs.add(ObjectAnimator.ofFloat(dockBattery2, View.ALPHA, 1));
+            }
+            if (dockBattery3 != null) {
+                lightsOnObjs.add(ObjectAnimator.ofFloat(dockBattery3, View.ALPHA, 1));
+            }
+            if (clock != null) {
+                lightsOnObjs.add(ObjectAnimator.ofFloat(clock, View.ALPHA, 1));
+            }
+            if (cclock != null) {
+                lightsOnObjs.add(ObjectAnimator.ofFloat(cclock, View.ALPHA, 1));
+            } 
+            
             final AnimatorSet lightsOutAnim = new AnimatorSet();
             lightsOutAnim.playTogether(
                     ObjectAnimator.ofFloat(notifications, View.ALPHA, 0),
                     ObjectAnimator.ofFloat(systemIcons, View.ALPHA, 0),
                     ObjectAnimator.ofFloat(signal, View.ALPHA, 0),
                     ObjectAnimator.ofFloat(battery, View.ALPHA, 0.5f),
-                    ObjectAnimator.ofFloat(mClock, View.ALPHA, 0.5f),
-                    ObjectAnimator.ofFloat(mCClock, View.ALPHA, 0.5f),
-                    ObjectAnimator.ofFloat(traffic, View.ALPHA, 0f)
+                    ObjectAnimator.ofFloat(mClock, View.ALPHA, 0.5f)
                 );
             lightsOutAnim.setDuration(750);
 
             final AnimatorSet lightsOnAnim = new AnimatorSet();
             lightsOnAnim.playTogether(
-                    lightsOnObjs.toArray(new ObjectAnimator[lightsOnObjs.size()]));
+                    ObjectAnimator.ofFloat(notifications, View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(systemIcons, View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(signal, View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(battery, View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(mClock, View.ALPHA, 1)
+                );
             lightsOnAnim.setDuration(250);
 
             mLightsOutAnimation = lightsOutAnim;

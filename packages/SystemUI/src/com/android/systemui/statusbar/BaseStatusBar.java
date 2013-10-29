@@ -217,6 +217,12 @@ public abstract class BaseStatusBar extends SystemUI implements
                     mProvisioningObserver);
         }
 
+	mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.NOTIFICATIONS_BEHAVIOUR), true,
+                SettingsObserver); 
+
+	mNotifShadeSettingsObserver.observe();
+
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
 
