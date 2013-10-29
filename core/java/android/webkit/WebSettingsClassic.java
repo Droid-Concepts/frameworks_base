@@ -1688,6 +1688,14 @@ public class WebSettingsClassic extends WebSettings {
         return mAutoFillProfile;
     }
 
+    /**
+     * @hide
+     * @return
+     */
+    public synchronized WebViewClassic getWebView(){
+        return mWebView;
+    }
+
     int getDoubleTapToastCount() {
         return mDoubleTapToastCount;
     }
