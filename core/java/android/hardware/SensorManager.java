@@ -654,8 +654,7 @@ public abstract class SensorManager {
      *         <code>false</code> otherwise.
      * @see #registerListener(SensorEventListener, Sensor, int)
      * @see #unregisterListener(SensorEventListener)
-     * @see #flush(Sensor)
-     * @throws IllegalArgumentException when sensor or listener is null or a trigger sensor.
+     * @see #flush(SensorEventListener)
      */
     public boolean registerListener(SensorEventListener listener, Sensor sensor, int rateUs,
             int maxBatchReportLatencyUs) {
@@ -665,18 +664,9 @@ public abstract class SensorManager {
 
     /**
      * Registers a {@link android.hardware.SensorEventListener SensorEventListener} for the given
-<<<<<<< HEAD
      * sensor. Events are delivered in continuous mode as soon as they are available. To reduce the
-<<<<<<< HEAD
      * battery usage, use {@link #registerListener(SensorEventListener, Sensor, int, int)} which
      * enables batch mode for the sensor.
-=======
-     * battery usage, use {@link #registerListener(SensorEventListener, Sensor, int, int, int,
-     * FlushCompleteListener)} which enables batch mode for the sensor.
->>>>>>> 0431af4... Revert "Revert "Sensor batching APIs for review.""
-=======
-     * sensor. Events are delivered in continuous mode as soon as they are available.
->>>>>>> d280d1e... Revert "Revert "Fix for build breakage. Remove documentation link to hidden registerListener API.""
      *
      * <p class="note"></p>
      * Note: Don't use this method with a one shot trigger sensor such as
@@ -713,20 +703,11 @@ public abstract class SensorManager {
      * @see #registerListener(SensorEventListener, Sensor, int)
      * @see #unregisterListener(SensorEventListener)
      * @see #unregisterListener(SensorEventListener, Sensor)
-<<<<<<< HEAD
-=======
-     *
-     * @throws IllegalArgumentException when sensor is null or a trigger sensor
->>>>>>> d280d1e... Revert "Revert "Fix for build breakage. Remove documentation link to hidden registerListener API.""
      */
     public boolean registerListener(SensorEventListener listener, Sensor sensor, int rateUs,
             Handler handler) {
-        if (listener == null || sensor == null) {
-            return false;
-        }
-
         int delay = getDelay(rateUs);
-        return registerListenerImpl(listener, sensor, delay, handler, 0, 0, null);
+        return registerListenerImpl(listener, sensor, delay, handler, 0, 0);
     }
 
     /**
@@ -750,13 +731,9 @@ public abstract class SensorManager {
      * @param handler The {@link android.os.Handler Handler} the
      *        {@link android.hardware.SensorEvent sensor events} will be delivered to.
      *
-<<<<<<< HEAD
      * @return <code>true</code> if batch mode is successfully enabled for this sensor,
      *         <code>false</code> otherwise.
      * @see #registerListener(SensorEventListener, Sensor, int, int)
-=======
-     * @see #registerListener(SensorEventListener, Sensor, int, int, int, FlushCompleteListener)
->>>>>>> 0431af4... Revert "Revert "Sensor batching APIs for review.""
      */
     public boolean registerListener(SensorEventListener listener, Sensor sensor, int rateUs,
             int maxBatchReportLatencyUs, Handler handler) {
@@ -770,18 +747,24 @@ public abstract class SensorManager {
 
 
     /**
-     * Flushes the batch FIFO of the given sensor. If there are events in the FIFO of this sensor,
-     * they are returned as if the batch timeout has expired. Events are returned in the
-     * usual way through the SensorEventListener. This call doesn't effect the batch timeout for
-     * this sensor. This call is asynchronous and returns immediately. FlushCompleteListener is
-     * called after all the events in the batch at the time of calling this method have been
-     * delivered successfully.
-     * @param sensor
-     *        The {@link android.hardware.Sensor Sensor} to flush.
-     * @return true if the flush is initiated successfully. false if the sensor isn't active
-     *         i.e no application is registered for updates from this sensor.
-     * @see #registerListener(SensorEventListener, Sensor, int, int, int, FlushCompleteListener)
-     * @throws IllegalArgumentException when sensor is null or a trigger sensor.
+     * Flushes the batch FIFO of all the sensors registered for this listener. If there are events
+     * in the FIFO of the sensor, they are returned as if the batch timeout in the FIFO of the
+     * sensors had expired. Events are returned in the usual way through the SensorEventListener.
+     * This call doesn't affect the batch timeout for this sensor. This call is asynchronous and
+     * returns immediately.
+     * {@link android.hardware.SensorEventListener2#onFlushCompleted onFlushCompleted} is called
+     * after all the events in the batch at the time of calling this method have been delivered
+     * successfully. If the hardware doesn't support flush, it still returns true and a trivial
+     * flush complete event is sent after the current event for all the clients registered for this
+     * sensor.
+     *
+     * @param listener A {@link android.hardware.SensorEventListener SensorEventListener} object
+     *        which was previously used in a registerListener call.
+     * @return <code>true</code> if the flush is initiated successfully on all the sensors
+     *         registered for this listener, false if no sensor is previously registered for this
+     *         listener or flush on one of the sensors fails.
+     * @see #registerListener(SensorEventListener, Sensor, int, int)
+     * @throws IllegalArgumentException when listener is null.
      */
     public boolean flush(SensorEventListener listener) {
         return flushImpl(listener);
