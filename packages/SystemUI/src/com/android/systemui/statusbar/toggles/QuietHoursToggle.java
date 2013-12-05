@@ -13,6 +13,8 @@ import android.view.View;
 import com.android.systemui.R;
 
 public class QuietHoursToggle extends StatefulToggle {
+    private static final String SCHEDULE_SERVICE_COMMAND =
+            "com.android.settings.gummy.service.SCHEDULE_SERVICE_COMMAND";
 
     @Override
     protected void init(Context c, int style) {
