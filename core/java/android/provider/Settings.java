@@ -4219,15 +4219,6 @@ public final class Settings {
         public static final String LOCK_PATTERN_VISIBLE = "lock_pattern_visible_pattern";
 
         /**
-         * Whether the NumKeyPad will change the orders of numbers
-         * in a PIN locked lockscreen
-         * 0 = off | 1 = always | 2 = only on request
-         * @hide
-          */
-
-        public static final String LOCK_NUMPAD_RANDOM = "lock_numpad_random";
-
-        /**
          * Colorize custom lock icon true/false
          * @hide
          */
@@ -4256,18 +4247,6 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_FRAME_COLOR = "lockscreen_frame_color";
-
-        /**
-         *Whether lock before unlock is enabled or disabled
-         * @hide
-         */
-        public static final String LOCK_BEFORE_UNLOCK = "lock_before_unlock";
-
-        /**
-         * Determines the width and height of the LockPatternView widget
-         * @hide
-         */
-        public static final String LOCK_PATTERN_SIZE = "lock_pattern_size";
 
         /**
          * Whether lock pattern will vibrate as user enters (0 = false, 1 =
