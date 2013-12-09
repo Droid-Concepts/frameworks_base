@@ -25,7 +25,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -165,6 +171,51 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
     protected void onFinishInflate() {
         super.onFinishInflate();
 
+        Resources res = getResources();
+
+        LinearLayout glowPadContainer = (LinearLayout) findViewById(
+                R.id.keyguard_glow_pad_container);
+        if (glowPadContainer != null) {
+            glowPadContainer.bringToFront();
+        }
+        final boolean isLandscape = res.getSystem().getConfiguration()
+                .orientation == Configuration.ORIENTATION_LANDSCAPE;
+        if (glowPadContainer != null &&  isLandscape &&
+                LockscreenTargetUtils.isShortcuts(mContext) &&
+                DeviceUtils.isPhone(mContext) &&
+                !LockscreenTargetUtils.isEightTargets(mContext)) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL
+            );
+            int pxBottom = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                60,
+                res.getDisplayMetrics());
+            params.setMargins(0, 0, 0, -pxBottom);
+            glowPadContainer.setLayoutParams(params);
+        }
+
+        if (glowPadContainer != null &&
+                LockscreenTargetUtils.isEightTargets(mContext)) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.CENTER
+            );
+            int pxBottom = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                10,
+                res.getDisplayMetrics());
+            params.setMargins(0, 0, 0, -pxBottom);
+            glowPadContainer.setLayoutParams(params);
+        }
+
+        LinearLayout msgAndShortcutsContainer = (LinearLayout) findViewById(
+                R.id.keyguard_message_and_shortcuts);
+        msgAndShortcutsContainer.bringToFront();
+
         int lockColor = Settings.Secure.getIntForUser(
                 mContext.getContentResolver(),
                 Settings.Secure.LOCKSCREEN_LOCK_COLOR, -2,
@@ -208,6 +259,23 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
         mBouncerFrame =
                 KeyguardSecurityViewHelper.colorizeFrame(
                 mContext, bouncerFrameView.getBackground());
+
+        final boolean lockBeforeUnlock = Settings.Secure.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.Secure.LOCK_BEFORE_UNLOCK, 0,
+                UserHandle.USER_CURRENT) == 1;
+
+        // bring emergency button on slider lockscreen
+        // to front when lockBeforeUnlock is enabled
+        // to make it clickable
+        if (mLockPatternUtils != null && mLockPatternUtils.isSecure() && lockBeforeUnlock) {
+            LinearLayout ecaContainer =
+                (LinearLayout) findViewById(R.id.keyguard_selector_fade_container);
+            if (ecaContainer != null) {
+                ecaContainer.bringToFront();
+            }
+        }
+    }
 
     public void setCarrierArea(View carrierArea) {
         mFadeView = carrierArea;
