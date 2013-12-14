@@ -397,7 +397,8 @@ public final class UsageStatsService extends IUsageStats.Stub {
             parser.setInput(fis, null);
             int eventType = parser.getEventType();
             while (eventType != XmlPullParser.START_TAG
-                    && eventType != XmlPullParser.END_DOCUMENT) {
+                  && eventType != XmlPullParser.END_DOCUMENT)
+            {
                 eventType = parser.next();
             }
             String tagName = parser.getName();
